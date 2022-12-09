@@ -10,8 +10,8 @@ import Container from "@mui/material/Container";
 
 
 import logo from "../../../assets/logo.png";
-import image from "../../../assets/landing.jpg";
 import Copyright from "../../common/Copyright/Copyright";
+import { signInStyles } from "./styles";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -28,30 +28,15 @@ export default function SignIn() {
   return (
     <Box
       component="main"
-      sx={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: `url(${image}) no-repeat center center/cover`,
-      }}
+      sx={signInStyles.main}
     >
       <Container
         component="section"
         maxWidth="xs"
-        sx={{
-          padding: "2rem 1rem",
-          borderRadius: "0.25rem",
-          backgroundColor: "rgba(255,255,255, 0.75)",
-        }}
+        sx={signInStyles.card}
       >
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+          sx={signInStyles.formContainer}
         >
           <Typography
             component="h1"
@@ -101,7 +86,7 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={signInStyles.submit}
             >
               Sign In
             </Button>
@@ -135,19 +120,13 @@ export default function SignIn() {
                   onClick={() => navigate("/catalog")}
                   variant="body2"
                   underline="hover"
-                  sx={{
-                    cursor: "pointer"
-                  }}
+                  sx={signInStyles.link}
                 >
                   Continue to Catalog
                 </Link>
               </Grid>
               <Box
-                sx={{
-                  width: "100%",
-                  objectFit: "contain",
-                  mt: 8,
-                }}
+                sx={signInStyles.logo}
                 component="img"
                 alt="Car logo"
                 src={logo}

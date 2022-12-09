@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-import image from "../../../assets/landing.jpg";
+import image from "../../../assets/signUp.jpg";
 import Copyright from "../../common/Copyright/Copyright";
 
 

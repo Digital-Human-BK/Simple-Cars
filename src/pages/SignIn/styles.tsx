@@ -12,7 +12,7 @@ export const signInStyles = {
   card: {
     padding: "2rem 1rem",
     borderRadius: "0.25rem",
-    backgroundColor: "rgba(255,255,255, 0.75)",
+    backgroundColor: "rgba(255,255,255, 0.80)",
   },
   formContainer: {
     display: "flex",

@@ -1,29 +1,72 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { signUpStyles } from "./styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+import { login, register } from "../../services/authentication";
 import Copyright from "../../components/common/Copyright/Copyright";
-import { signUpStyles } from "./styles";
 
+type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [userCredentials, setUserCredentials] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+  });
+
+  const handleToggleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+  };
+
+  const handleChange = (ev: ChangeEvent, key: string) => {
+    console.log(ev.target.value);
+
+    setUserCredentials((prevState) => ({
+      ...prevState,
+      [key]: ev.target.value,
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      await register(userCredentials);
+
+      const user = await login({
+        username: userCredentials.username,
+        password: userCredentials.password,
+      });
+
+      console.log(user);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -36,9 +79,7 @@ export default function SignUp() {
         maxWidth="xs"
         sx={signUpStyles.card}
       >
-        <Box
-          sx={signUpStyles.formContainer}
-        >
+        <Box sx={signUpStyles.formContainer}>
           <Typography
             component="h1"
             variant="h4"
@@ -62,11 +103,12 @@ export default function SignUp() {
                 sm={6}
               >
                 <TextField
-                  name="firstName"
                   required
                   fullWidth
                   id="firstName"
+                  name="firstName"
                   label="First Name"
+                  onChange={(ev) => handleChange(ev, "fistName")}
                 />
               </Grid>
               <Grid
@@ -80,6 +122,7 @@ export default function SignUp() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
+                  onChange={(ev) => handleChange(ev, "lastName")}
                 />
               </Grid>
               <Grid
@@ -92,20 +135,40 @@ export default function SignUp() {
                   id="username"
                   label="Username"
                   name="username"
+                  onChange={(ev) => handleChange(ev, "username")}
                 />
               </Grid>
               <Grid
                 item
                 xs={12}
               >
-                <TextField
-                  required
+                <FormControl
+                  variant="outlined"
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                />
+                >
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-password"
+                    type={showPassword ? "text" : "password"}
+                    value={userCredentials.password}
+                    onChange={(ev) => handleChange(ev, "password")}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleToggleShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                  />
+                </FormControl>
               </Grid>
             </Grid>
             <Button

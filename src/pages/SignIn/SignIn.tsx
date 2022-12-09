@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,19 +8,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-import image from "../../../assets/signUp.jpg";
-import Copyright from "../../common/Copyright/Copyright";
 
+import { signInStyles } from "./styles";
+import logo from "../../assets/logo.png";
+import Copyright from "../../components/common/Copyright/Copyright";
 
-export default function SignUp() {
+export default function SignIn() {
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
       username: data.get("username"),
       password: data.get("password"),
     });
@@ -29,37 +28,22 @@ export default function SignUp() {
   return (
     <Box
       component="main"
-      sx={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: `url(${image}) no-repeat center center/cover`,
-      }}
+      sx={signInStyles.main}
     >
       <Container
         component="section"
         maxWidth="xs"
-        sx={{
-          padding: "2rem 1rem",
-          borderRadius: "0.25rem",
-          backgroundColor: "rgba(255,255,255, 0.75)",
-        }}
+        sx={signInStyles.card}
       >
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+          sx={signInStyles.formContainer}
         >
           <Typography
             component="h1"
             variant="h4"
             fontWeight="700"
           >
-            Sign Up
+            Sign In
           </Typography>
           <Box
             component="form"
@@ -74,32 +58,6 @@ export default function SignUp() {
               <Grid
                 item
                 xs={12}
-                sm={6}
-              >
-                <TextField
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-              >
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
               >
                 <TextField
                   required
@@ -107,6 +65,7 @@ export default function SignUp() {
                   id="username"
                   label="Username"
                   name="username"
+                  autoFocus
                 />
               </Grid>
               <Grid
@@ -127,30 +86,55 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={signInStyles.submit}
             >
-              Sign Up
+              Sign In
             </Button>
             <Grid
               container
+              spacing={1}
+              direction="column"
+              alignItems="center"
               justifyContent="center"
             >
-              <Grid item>
+              <Grid
+                item
+                xs={12}
+              >
                 <Link
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/sign-up")}
                   variant="body2"
                   underline="hover"
                   sx={{
-                    cursor: "pointer",
+                    cursor: "pointer"
                   }}
                 >
-                  Already have an account? Sign in
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <Link
+                  onClick={() => navigate("/catalog")}
+                  variant="body2"
+                  underline="hover"
+                  sx={signInStyles.link}
+                >
+                  Continue to Catalog
+                </Link>
+              </Grid>
+              <Box
+                sx={signInStyles.logo}
+                component="img"
+                alt="Car logo"
+                src={logo}
+              />
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+        <Copyright sx={{ mt: 0 }} />
       </Container>
     </Box>
   );

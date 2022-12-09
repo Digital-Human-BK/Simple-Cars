@@ -1,4 +1,4 @@
-import image from "../../../assets/landing.jpg";
+import image from "../../assets/landing.jpg";
 
 export const signInStyles = {
   main: {

@@ -1,4 +1,4 @@
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,18 +8,19 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
+import Copyright from "../../components/common/Copyright/Copyright";
+import { signUpStyles } from "./styles";
 
-import logo from "../../../assets/logo.png";
-import Copyright from "../../common/Copyright/Copyright";
-import { signInStyles } from "./styles";
 
-export default function SignIn() {
+export default function SignUp() {
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       username: data.get("username"),
       password: data.get("password"),
     });
@@ -28,33 +29,59 @@ export default function SignIn() {
   return (
     <Box
       component="main"
-      sx={signInStyles.main}
+      sx={signUpStyles.main}
     >
       <Container
         component="section"
         maxWidth="xs"
-        sx={signInStyles.card}
+        sx={signUpStyles.card}
       >
         <Box
-          sx={signInStyles.formContainer}
+          sx={signUpStyles.formContainer}
         >
           <Typography
             component="h1"
             variant="h4"
             fontWeight="700"
           >
-            Sign In
+            Sign Up
           </Typography>
           <Box
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={signUpStyles.form}
           >
             <Grid
               container
               spacing={2}
             >
+              <Grid
+                item
+                xs={12}
+                sm={6}
+              >
+                <TextField
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+              >
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                />
+              </Grid>
               <Grid
                 item
                 xs={12}
@@ -65,7 +92,6 @@ export default function SignIn() {
                   id="username"
                   label="Username"
                   name="username"
-                  autoFocus
                 />
               </Grid>
               <Grid
@@ -86,55 +112,28 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={signInStyles.submit}
+              sx={signUpStyles.submit}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid
               container
-              spacing={1}
-              direction="column"
-              alignItems="center"
               justifyContent="center"
             >
-              <Grid
-                item
-                xs={12}
-              >
+              <Grid item>
                 <Link
-                  onClick={() => navigate("/sign-up")}
+                  onClick={() => navigate("/")}
                   variant="body2"
                   underline="hover"
-                  sx={{
-                    cursor: "pointer"
-                  }}
+                  sx={signUpStyles.link}
                 >
-                  Don't have an account? Sign Up
+                  Already have an account? Sign in
                 </Link>
               </Grid>
-              <Grid
-                item
-                xs={12}
-              >
-                <Link
-                  onClick={() => navigate("/catalog")}
-                  variant="body2"
-                  underline="hover"
-                  sx={signInStyles.link}
-                >
-                  Continue to Catalog
-                </Link>
-              </Grid>
-              <Box
-                sx={signInStyles.logo}
-                component="img"
-                alt="Car logo"
-                src={logo}
-              />
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 0 }} />
+        <Copyright sx={{ mt: 5 }} />
       </Container>
     </Box>
   );

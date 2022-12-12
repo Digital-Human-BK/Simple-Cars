@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { signInStyles } from "./styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -21,11 +19,11 @@ import logo from "../../assets/logo.png";
 import Copyright from "../../components/common/Copyright/Copyright";
 import { login } from "../../store/auth-slice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
+import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignIn() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   // const user = useAppSelector((state) => state.auth.user);
 
@@ -56,7 +54,7 @@ export default function SignIn() {
     ev.preventDefault();
     try {
       const user = await dispatch(login(userCredentials));
-      console.log(user.payload)
+      console.log(user.payload);
     } catch (error) {
       alert(error);
     }
@@ -157,29 +155,17 @@ export default function SignIn() {
                 item
                 xs={12}
               >
-                <Link
-                  onClick={() => navigate("/sign-up")}
-                  variant="body2"
-                  underline="hover"
-                  sx={{
-                    cursor: "pointer",
-                  }}
-                >
+                <LinkComponent path="/sign-up">
                   Don't have an account? Sign Up
-                </Link>
+                </LinkComponent>
               </Grid>
               <Grid
                 item
                 xs={12}
               >
-                <Link
-                  onClick={() => navigate("/catalog")}
-                  variant="body2"
-                  underline="hover"
-                  sx={signInStyles.link}
-                >
+                <LinkComponent path="/catalog">
                   Continue to Catalog
-                </Link>
+                </LinkComponent>
               </Grid>
               <Box
                 sx={signInStyles.logo}

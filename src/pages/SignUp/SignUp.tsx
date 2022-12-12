@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { signUpStyles } from "./styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -19,12 +17,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { login, register } from "../../services/authentication";
 import Copyright from "../../components/common/Copyright/Copyright";
+import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignUp() {
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const [userCredentials, setUserCredentials] = useState({
     firstName: "",
@@ -184,14 +181,9 @@ export default function SignUp() {
               justifyContent="center"
             >
               <Grid item>
-                <Link
-                  onClick={() => navigate("/")}
-                  variant="body2"
-                  underline="hover"
-                  sx={signUpStyles.link}
-                >
+                <LinkComponent path="/">
                   Already have an account? Sign in
-                </Link>
+                </LinkComponent>
               </Grid>
             </Grid>
           </Box>

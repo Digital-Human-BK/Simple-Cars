@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -16,6 +15,7 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
+import { Car } from "../../interfaces/Car";
 
 interface Column {
   id:
@@ -33,7 +33,7 @@ interface Column {
     | "extras";
   label: string;
   minWidth?: number;
-  align?: "right";
+  align?: "right" | "center";
 }
 
 const columns: readonly Column[] = [
@@ -44,7 +44,7 @@ const columns: readonly Column[] = [
   { id: "gearbox", label: "Gear Box", minWidth: 100 },
   { id: "condition", label: "Condition", minWidth: 100 },
   { id: "hp", label: "Horse Power", minWidth: 100 },
-  { id: "price", label: "Price", minWidth: 100 },
+  { id: "price", label: "Price $", minWidth: 100 },
   { id: "city", label: "City", minWidth: 100 },
   { id: "mileage", label: "Mileage", minWidth: 100 },
   { id: "extras", label: "Extras", minWidth: 100 },
@@ -130,148 +130,17 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-const mockData = [
-  {
-    id: "1",
-    make: "Honda",
-    model: "S2000",
-    year: 2002,
-    engineType: "PETROL",
-    gearBox: "MANUAL",
-    condition: "NEW",
-    horsePower: 240,
-    color: "red",
-    price: 13000,
-    city: "London",
-    mileage: 60000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f1",
-      username: "MikeLP",
-      password: "11111",
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "hardtop",
-  },
-  {
-    id: "2",
-    make: "Honda",
-    model: "S2000",
-    year: 2002,
-    engineType: "PETROL",
-    gearBox: "MANUAL",
-    condition: "NEW",
-    horsePower: 240,
-    color: "red",
-    price: 13000,
-    city: "London",
-    mileage: 60000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f1",
-      username: "MikeLP",
-      password: "11111",
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "hardtop",
-  },
-  {
-    id: "3",
-    make: "Honda",
-    model: "S2000",
-    year: 2002,
-    engineType: "PETROL",
-    gearBox: "MANUAL",
-    condition: "NEW",
-    horsePower: 240,
-    color: "red",
-    price: 13000,
-    city: "London",
-    mileage: 60000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f1",
-      username: "MikeLP",
-      password: "11111",
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "hardtop",
-  },
-  {
-    id: "4",
-    make: "Honda",
-    model: "S2000",
-    year: 2002,
-    engineType: "PETROL",
-    gearBox: "MANUAL",
-    condition: "NEW",
-    horsePower: 240,
-    color: "red",
-    price: 13000,
-    city: "London",
-    mileage: 60000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f1",
-      username: "MikeLP",
-      password: "11111",
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "hardtop",
-  },
-  {
-    id: "5",
-    make: "Honda",
-    model: "S2000",
-    year: 2002,
-    engineType: "PETROL",
-    gearBox: "MANUAL",
-    condition: "NEW",
-    horsePower: 240,
-    color: "red",
-    price: 13000,
-    city: "London",
-    mileage: 60000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f1",
-      username: "MikeLP",
-      password: "11111",
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "hardtop",
-  },
-  {
-    id: "6",
-    make: "Honda",
-    model: "S2000",
-    year: 2002,
-    engineType: "PETROL",
-    gearBox: "MANUAL",
-    condition: "NEW",
-    horsePower: 240,
-    color: "red",
-    price: 13000,
-    city: "London",
-    mileage: 60000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f1",
-      username: "MikeLP",
-      password: "11111",
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "hardtop",
-  },
-];
+type CatalogTableProps = {
+  carData: Car[];
+};
 
-export default function CatalogTable() {
+export default function CatalogTable({ carData }: CatalogTableProps) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - mockData.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - carData.length) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -298,6 +167,7 @@ export default function CatalogTable() {
           <TableRow>
             {columns.map((column) => (
               <TableCell
+                sx={{ fontWeight: 600 }}
                 key={column.id}
                 align={column.align}
                 style={{ minWidth: column.minWidth }}
@@ -309,11 +179,11 @@ export default function CatalogTable() {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? mockData.slice(
+            ? carData.slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
               )
-            : mockData
+            : carData
           ).map((row) => (
             <TableRow key={row.id}>
               <TableCell
@@ -322,61 +192,31 @@ export default function CatalogTable() {
               >
                 {row.make}
               </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.model}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.year}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.engineType}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.gearBox}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.condition}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.horsePower}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.price}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.city}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.mileage}
-              </TableCell>
-              <TableCell
-                style={{ width: 160 }}
-              >
-                {row.extras}
-              </TableCell>
+              <TableCell style={{ width: 160 }}>{row.model}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.year}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.engineType}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.gearBox}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.condition}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.horsePower}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.price}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.city}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.mileage}</TableCell>
+              <TableCell style={{ width: 160 }}>{row.extras}</TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
               <TableCell colSpan={6} />
+            </TableRow>
+          )}
+          {carData.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={12}
+                sx={{height: "400px", fontSize: "2rem", textAlign: "center"}}
+              >
+                No Data Found
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
@@ -385,7 +225,7 @@ export default function CatalogTable() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
               colSpan={12}
-              count={mockData.length}
+              count={carData.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

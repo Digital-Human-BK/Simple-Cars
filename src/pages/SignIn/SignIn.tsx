@@ -17,14 +17,17 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import { login } from "../../services/authentication";
 import logo from "../../assets/logo.png";
 import Copyright from "../../components/common/Copyright/Copyright";
+import { login } from "../../store/auth-slice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  // const user = useAppSelector((state) => state.auth.user);
 
   const [showPassword, setShowPassword] = useState(false);
   const [userCredentials, setUserCredentials] = useState({
@@ -36,7 +39,9 @@ export default function SignIn() {
     setShowPassword((prevState) => !prevState);
   };
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
 
@@ -50,8 +55,8 @@ export default function SignIn() {
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     try {
-      const user = await login(userCredentials);
-      console.log(user);
+      const user = await dispatch(login(userCredentials));
+      console.log(user.payload)
     } catch (error) {
       alert(error);
     }

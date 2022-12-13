@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
@@ -10,33 +9,13 @@ import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import LastPageIcon from "@mui/icons-material/LastPage";
+
 import { Car } from "../../interfaces/Car";
+import { TableColumns } from "../../interfaces/TableColumns";
+import CatalogTableRow from "./CatalogTableRow/CatalogTableRow";
+import TablePaginationActions from "./TablePaginationActions/TablePaginationActions";
 
-interface Column {
-  id:
-    | "make"
-    | "model"
-    | "year"
-    | "engine"
-    | "gearbox"
-    | "condition"
-    | "hp"
-    | "color"
-    | "price"
-    | "city"
-    | "mileage"
-    | "extras";
-  label: string;
-  minWidth?: number;
-  align?: "right" | "center";
-}
-
-const columns: readonly Column[] = [
+const columns: readonly TableColumns[] = [
   { id: "make", label: "Make", minWidth: 170 },
   { id: "model", label: "Model", minWidth: 100 },
   { id: "year", label: "Year", minWidth: 100 },
@@ -49,86 +28,6 @@ const columns: readonly Column[] = [
   { id: "mileage", label: "Mileage", minWidth: 100 },
   { id: "extras", label: "Extras", minWidth: 100 },
 ];
-
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
-
-function TablePaginationActions(props: TablePaginationActionsProps) {
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
-
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </Box>
-  );
-}
 
 type CatalogTableProps = {
   carData: Car[];
@@ -185,24 +84,10 @@ export default function CatalogTable({ carData }: CatalogTableProps) {
               )
             : carData
           ).map((row) => (
-            <TableRow key={row.id}>
-              <TableCell
-                component="th"
-                scope="row"
-              >
-                {row.make}
-              </TableCell>
-              <TableCell style={{ width: 160 }}>{row.model}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.year}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.engineType}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.gearBox}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.condition}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.horsePower}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.price}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.city}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.mileage}</TableCell>
-              <TableCell style={{ width: 160 }}>{row.extras}</TableCell>
-            </TableRow>
+            <CatalogTableRow
+              key={row.id}
+              row={row}
+            />
           ))}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
@@ -213,7 +98,7 @@ export default function CatalogTable({ carData }: CatalogTableProps) {
             <TableRow>
               <TableCell
                 colSpan={12}
-                sx={{height: "400px", fontSize: "2rem", textAlign: "center"}}
+                sx={{ height: "400px", fontSize: "2rem", textAlign: "center" }}
               >
                 No Data Found
               </TableCell>

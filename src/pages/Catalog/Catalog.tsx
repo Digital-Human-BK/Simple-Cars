@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import Box from "@mui/material/Box";
 import CatalogTable from "../../components/CatalogTable/CatalogTable";
@@ -167,14 +167,8 @@ const mockData = [
 function Catalog() {
   const [carData, setCarData] = useState<Car[]>(mockData);
 
-  const searchHandler = (
-    ev: React.FormEvent<HTMLFormElement>,
-    criteria: string
-  ): void => {
-
-    ev.preventDefault();
-
-    if (criteria === "") {
+  const searchHandler = useCallback((criteria: string): void => {
+    if (criteria.trim() === "") {
       setCarData(mockData);
     } else {
       const searchResults = mockData.filter(
@@ -183,7 +177,7 @@ function Catalog() {
       );
       setCarData(searchResults);
     }
-  };
+  }, []);
 
   return (
     <Box component={"main"}>

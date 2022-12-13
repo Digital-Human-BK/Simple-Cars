@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -14,7 +14,7 @@ import { searchBarStyles } from "./styles";
 
 type SearchBarProps = {
   onSearch: (
-    event: React.FormEvent<HTMLFormElement>,
+    // event: React.FormEvent<HTMLFormElement>,
     searchCriteria: string
   ) => void;
 };
@@ -23,6 +23,16 @@ function SearchBar({ onSearch }: SearchBarProps) {
   const user = useAppSelector((state) => state.auth.user);
 
   const [search, setSearch] = useState<string>("");
+
+  useEffect(() => {
+    console.log("Warning loop");
+
+    const debounce = setTimeout(() => {
+      onSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(debounce);
+  }, [search, onSearch]);
 
   return (
     <Grid
@@ -47,32 +57,32 @@ function SearchBar({ onSearch }: SearchBarProps) {
         xs={3}
       >
         <Box sx={searchBarStyles.searchBar}>
-          <Box
+          {/* <Box
             component="form"
             method="GET"
             onSubmit={(ev) => onSearch(ev, search)}
-          >
-            <TextField
-              placeholder="Search by model"
-              id="search"
-              type="search"
-              variant="standard"
-              color="info"
-              value={search}
-              onChange={(ev) => setSearch(ev.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment
-                    component="button"
-                    position="start"
-                    sx={searchBarStyles.adornment}
-                  >
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
+          > */}
+          <TextField
+            placeholder="Search by model"
+            id="search"
+            type="search"
+            variant="standard"
+            color="info"
+            value={search}
+            onChange={(ev) => setSearch(ev.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment
+                  component="button"
+                  position="start"
+                  sx={searchBarStyles.adornment}
+                >
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          {/* </Box> */}
           {user && (
             <IconButton onClick={() => console.log("Add car")}>
               <AddBoxIcon color="primary" />

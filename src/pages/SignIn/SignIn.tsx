@@ -18,14 +18,15 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import logo from "../../assets/logo.png";
 import Copyright from "../../components/common/Copyright/Copyright";
 import { login } from "../../store/auth-slice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch } from "../../store/store";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
+import { useNavigate } from "react-router-dom";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  // const user = useAppSelector((state) => state.auth.user);
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [userCredentials, setUserCredentials] = useState({
@@ -54,6 +55,7 @@ export default function SignIn() {
     ev.preventDefault();
     try {
       const user = await dispatch(login(userCredentials));
+      navigate("/catalog");
       console.log(user.payload);
     } catch (error) {
       alert(error);

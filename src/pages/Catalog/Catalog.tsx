@@ -166,24 +166,80 @@ const mockData = [
 
 function Catalog() {
   const [carData, setCarData] = useState<Car[]>(mockData);
+  const [isAddingCar, setIsAddingCar] = useState<boolean>(false);
 
   const searchHandler = useCallback((criteria: string): void => {
-    if (criteria.trim() === "") {
-      setCarData(mockData);
-    } else {
-      const searchResults = mockData.filter(
-        (item) =>
-          item.model.toLocaleLowerCase() === criteria.toLocaleLowerCase()
-      );
-      setCarData(searchResults);
-    }
+    // if (criteria.trim() === "") {
+    //   setCarData(mockData);
+    // } else {
+    //   const searchResults = mockData.filter(
+    //     (item) =>
+    //       item.model.toLocaleLowerCase() === criteria.toLocaleLowerCase()
+    //   );
+    //   setCarData(searchResults);
+    // }
+    const lowerCase = criteria.toLowerCase().trim();
+      if (lowerCase === '') {
+        setCarData(mockData);
+      } else {
+        console.log(lowerCase);
+        
+        const filteredData = mockData.filter((item) => {
+          return Object.values(item).some((v) =>
+            v.toString().toLowerCase().includes(lowerCase)
+          );
+        });
+        setCarData(filteredData);
+      }
   }, []);
+
+  const addCarHandler = (newCarData: any) => {
+    newCarData.year = Number(newCarData.year);
+    newCarData.horsePower = Number(newCarData.horsePower);
+    newCarData.price = Number(newCarData.price);
+    newCarData.mileage = Number(newCarData.mileage);
+
+    setCarData((prevData) => [newCarData, ...prevData]);
+  };
+
+  const editHandler = (newCarData: any) => {
+    newCarData.year = Number(newCarData.year);
+    newCarData.horsePower = Number(newCarData.horsePower);
+    newCarData.price = Number(newCarData.price);
+    newCarData.mileage = Number(newCarData.mileage);
+
+    const updatedData = carData.map((car) =>
+      car.id !== newCarData.id ? car : newCarData
+    );
+
+    setCarData(updatedData);
+  };
+
+  const deleteCarHandler = (id: string) => {
+    const filteredCarData = carData.filter((car) => car.id !== id);
+    setCarData(filteredCarData);
+  };
+
+  const toggleAddCarHandler = (): void => {
+    setIsAddingCar((prev) => !prev);
+  };
 
   return (
     <Box component={"main"}>
       <NavBar />
-      <SearchBar onSearch={searchHandler} />
-      <CatalogTable carData={carData} />
+      <SearchBar
+        onSearch={searchHandler}
+        isAddingCar={isAddingCar}
+        toggleAddCar={toggleAddCarHandler}
+      />
+      <CatalogTable
+        carData={carData}
+        isAddingCar={isAddingCar}
+        toggleMenu={toggleAddCarHandler}
+        onAddNewData={addCarHandler}
+        onDataEdit={editHandler}
+        onDeleteData={deleteCarHandler}
+      />
     </Box>
   );
 }

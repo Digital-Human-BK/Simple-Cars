@@ -8,18 +8,18 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 
 import { useAppSelector } from "../../store/store";
 import { searchBarStyles } from "./styles";
 
 type SearchBarProps = {
-  onSearch: (
-    // event: React.FormEvent<HTMLFormElement>,
-    searchCriteria: string
-  ) => void;
+  onSearch: (searchCriteria: string) => void;
+  isAddingCar: boolean;
+  toggleAddCar: () => void;
 };
 
-function SearchBar({ onSearch }: SearchBarProps) {
+function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
   const user = useAppSelector((state) => state.auth.user);
 
   const [search, setSearch] = useState<string>("");
@@ -57,11 +57,6 @@ function SearchBar({ onSearch }: SearchBarProps) {
         xs={3}
       >
         <Box sx={searchBarStyles.searchBar}>
-          {/* <Box
-            component="form"
-            method="GET"
-            onSubmit={(ev) => onSearch(ev, search)}
-          > */}
           <TextField
             placeholder="Search by model"
             id="search"
@@ -82,10 +77,13 @@ function SearchBar({ onSearch }: SearchBarProps) {
               ),
             }}
           />
-          {/* </Box> */}
           {user && (
-            <IconButton onClick={() => console.log("Add car")}>
-              <AddBoxIcon color="primary" />
+            <IconButton onClick={toggleAddCar}>
+              {isAddingCar ? (
+                <DoNotDisturbOnIcon color="secondary" />
+              ) : (
+                <AddBoxIcon color="success" />
+              )}
             </IconButton>
           )}
         </Box>

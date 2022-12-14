@@ -1,5 +1,6 @@
 export interface TableColumns {
   id:
+    | "actions"
     | "make"
     | "model"
     | "year"

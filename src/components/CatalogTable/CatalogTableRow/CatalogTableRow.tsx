@@ -9,6 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import { Car } from "../../../interfaces/Car";
+import { selectUser } from "../../../store/auth-slice";
 import { useAppSelector } from "../../../store/store";
 import AddCar from "../AddCar/AddCar";
 
@@ -20,8 +21,8 @@ type CatalogTableRowProps = {
 
 function CatalogTableRow({ row, onDeleteData, onDataEdit }: CatalogTableRowProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const user = useAppSelector((state) => state.auth.user);
-  const isOwner = user?.user.id === row.user.id;
+  const user = useAppSelector(selectUser);
+  const isOwner = user?.id === row.user.id;
 
   const ownerControls = (
     <Box>

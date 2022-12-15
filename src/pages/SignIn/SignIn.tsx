@@ -17,9 +17,9 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import logo from "../../assets/logo.png";
 import Copyright from "../../components/common/Copyright/Copyright";
+import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 import { login } from "../../store/auth-slice";
 import { useAppDispatch } from "../../store/store";
-import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 import { useNavigate } from "react-router-dom";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
@@ -54,9 +54,8 @@ export default function SignIn() {
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     try {
-      const user = await dispatch(login(userCredentials));
+      await dispatch(login(userCredentials));
       navigate("/catalog");
-      console.log(user.payload);
     } catch (error) {
       alert(error);
     }

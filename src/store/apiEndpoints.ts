@@ -5,7 +5,7 @@ interface authEndpointsObject {
   register: string;
 }
 
-interface carEndpointsObject {
+interface catalogEndpointsObject {
   [key: string]: string
 }
 
@@ -14,8 +14,7 @@ export const authEndpoints: authEndpointsObject = {
   register: "/users/register",
 };
 
-export const carEndpoints: carEndpointsObject = {
-  car: "/cars", // + /{Id}/{userId}?
-  cars: "/cars",
+export const catalogEndpoints: catalogEndpointsObject = {
+  cars: "/cars", // + /{Id}/{userId}?
   allCars: "/cars/all",
 };

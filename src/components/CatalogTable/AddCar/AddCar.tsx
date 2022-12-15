@@ -12,6 +12,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { Car } from "../../../interfaces/Car";
 import { useAppSelector } from "../../../store/store";
+import { selectUser } from "../../../store/auth-slice";
 
 type ChangeEvent =
   | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -25,14 +26,15 @@ type AddCarProps = {
 };
 
 function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector(selectUser);
+  
   const [newCar, setNewCar] = useState(() => {
     if (data) {
       return data;
     } else {
       return {
         id: Math.random().toString(),
-        user: user?.user,
+        user: user
       };
     }
   });
@@ -101,7 +103,7 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
             onChange={(ev: SelectChangeEvent) => handleChange(ev, "engineType")}
           >
             <MenuItem value="DIESEL">DIESEL</MenuItem>
-            <MenuItem value="PETROL">PETROL</MenuItem>
+            <MenuItem value="GASOLINE">GASOLINE</MenuItem>
             <MenuItem value="HYBRID">HYBRID</MenuItem>
           </Select>
         </FormControl>
@@ -116,7 +118,7 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
             onChange={(ev: SelectChangeEvent) => handleChange(ev, "gearBox")}
           >
             <MenuItem value="MANUAL">MANUAL</MenuItem>
-            <MenuItem value="AUTO">AUTO</MenuItem>
+            <MenuItem value="AUTOMATIC">AUTOMATIC</MenuItem>
           </Select>
         </FormControl>
       </TableCell>

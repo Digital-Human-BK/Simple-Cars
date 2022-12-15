@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -10,45 +9,31 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import { Car } from "../../interfaces/Car";
-import { TableColumns } from "../../interfaces/TableColumns";
+import AddCar from "./AddCar/AddCar";
+import CatalogTableHead from "./CatalogTableHead/CatalogTableHead";
 import CatalogTableRow from "./CatalogTableRow/CatalogTableRow";
 import TablePaginationActions from "./TablePaginationActions/TablePaginationActions";
-import AddCar from "./AddCar/AddCar";
-
-const columns: readonly TableColumns[] = [
-  { id: "actions", label: "Actions", minWidth: 45 },
-  { id: "make", label: "Make", minWidth: 100 },
-  { id: "model", label: "Model", minWidth: 100 },
-  { id: "year", label: "Year", minWidth: 50 },
-  { id: "engine", label: "Engine Type", minWidth: 85 },
-  { id: "gearbox", label: "Gear Box", minWidth: 85 },
-  { id: "condition", label: "Condition", minWidth: 85 },
-  { id: "hp", label: "Horse Power", minWidth: 100 },
-  { id: "color", label: "Color", minWidth: 60 },
-  { id: "price", label: "Price $", minWidth: 100 },
-  { id: "city", label: "City", minWidth: 100 },
-  { id: "mileage", label: "Mileage", minWidth: 100 },
-  { id: "extras", label: "Extras", minWidth: 70 },
-];
+import { useAppSelector } from "../../store/store";
+import { selectAllCars } from "../../store/catalog-slice";
+import CatalogTableNotification from "./CatalogTableNotification/CatalogTableNotification";
 
 type CatalogTableProps = {
-  carData: Car[];
   isAddingCar: boolean;
   toggleMenu: () => void;
   onAddNewData: (data: any) => void;
   onDeleteData: (id: string) => void;
-  onDataEdit: (data: any) => void
+  onDataEdit: (data: any) => void;
 };
 
 export default function CatalogTable({
-  carData,
   isAddingCar,
   toggleMenu,
   onAddNewData,
   onDeleteData,
   onDataEdit,
 }: CatalogTableProps) {
+  console.log("render");
+  const carData = useAppSelector(selectAllCars);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -78,20 +63,7 @@ export default function CatalogTable({
         sx={{ minWidth: 500 }}
         aria-label="custom pagination table"
       >
-        <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              <TableCell
-                sx={{ fontWeight: 600 }}
-                key={column.id}
-                align={column.align}
-                style={{ minWidth: column.minWidth }}
-              >
-                {column.label}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+        <CatalogTableHead />
         <TableBody>
           {isAddingCar && (
             <AddCar
@@ -118,16 +90,7 @@ export default function CatalogTable({
               <TableCell colSpan={6} />
             </TableRow>
           )}
-          {carData.length === 0 && (
-            <TableRow>
-              <TableCell
-                colSpan={13}
-                sx={{ height: "400px", fontSize: "2rem", textAlign: "center" }}
-              >
-                No Data Found
-              </TableCell>
-            </TableRow>
-          )}
+          {carData.length === 0 && <CatalogTableNotification />}
         </TableBody>
         <TableFooter>
           <TableRow>

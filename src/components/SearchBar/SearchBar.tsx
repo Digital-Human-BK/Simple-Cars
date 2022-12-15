@@ -12,6 +12,7 @@ import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 
 import { useAppSelector } from "../../store/store";
 import { searchBarStyles } from "./styles";
+import { selectUser } from "../../store/auth-slice";
 
 type SearchBarProps = {
   onSearch: (searchCriteria: string) => void;
@@ -20,12 +21,11 @@ type SearchBarProps = {
 };
 
 function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector(selectUser);
 
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    console.log("Warning loop");
 
     const debounce = setTimeout(() => {
       onSearch(search);

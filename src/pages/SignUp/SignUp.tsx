@@ -15,7 +15,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import { login, register } from "../../services/authentication";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
@@ -53,14 +52,14 @@ export default function SignUp() {
     event.preventDefault();
 
     try {
-      await register(userCredentials);
+      // await register(userCredentials);
 
-      const user = await login({
-        username: userCredentials.username,
-        password: userCredentials.password,
-      });
+      // const user = await login({
+      //   username: userCredentials.username,
+      //   password: userCredentials.password,
+      // });
 
-      console.log(user);
+      // console.log(user);
     } catch (error) {
       alert(error);
     }

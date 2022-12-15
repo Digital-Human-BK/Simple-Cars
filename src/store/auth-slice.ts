@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "../interfaces/User";
-import { BASE_URL, authEndpoints } from "../api/api";
+import { BASE_URL, authEndpoints } from "./apiEndpoints";
+import { RootState } from "./store";
 
 interface UserState {
-  user: User | null;
+  userData: User | null;
   loading: boolean;
   error: any; //null | string;
 }
 
 const initialState: UserState = {
-  user: null,
+  userData: null,
   loading: false,
   error: null,
 };
@@ -30,16 +31,25 @@ export const login = createAsyncThunk<User, Object>(
         throw new Error("Wrong Username or Password");
       }
 
+      if(res.status === 500) {
+        throw new Error("User does not exist")
+      }
+
       if (res.ok) {
-        return res.json();
+        return await res.json();
       } else {
         throw new Error("Something went wrong!");
       }
-    } catch (error: any) {
-      return error.message;
+    } catch (err) {
+      let message = "Unknown Error";
+      if (err instanceof Error) {
+        message = err.message;
+      }
+      throw message;
     }
   }
 );
+
 export const register = createAsyncThunk<User, Object>(
   "auth/register",
   async (registerData) => {
@@ -61,8 +71,12 @@ export const register = createAsyncThunk<User, Object>(
       } else {
         throw new Error("Something went wrong!");
       }
-    } catch (error: any) {
-      return error.message;
+    } catch (err) {
+      let message = "Unknown Error";
+      if (err instanceof Error) {
+        message = err.message;
+      }
+      return message;
     }
   }
 );
@@ -80,16 +94,20 @@ const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      state.user = action.payload;
+      state.userData = action.payload;
       state.loading = false;
     });
     builder.addCase(login.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.loading = false;     
+      state.error = action.error.message;
     });
   },
 });
 
 export const { logout } = authSlice.actions;
+export const selectUser = (state: RootState) => state.auth.userData?.user;
+export const selectToken = (state: RootState) => state.auth.userData?.jwtToken;
+export const selectAuthLoading = (state: RootState) => state.auth.loading;
+export const selectAuthError = (state: RootState) => state.auth.error;
 
-export default authSlice;
+export default authSlice.reducer;

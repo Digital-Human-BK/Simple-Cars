@@ -25,15 +25,15 @@ export interface NewCar {
   id: string;
   make: string;
   model: string;
-  year: number;
+  year: string | number;
   engineType: string;
   gearBox: string;
   condition: string;
-  horsePower: number;
+  horsePower: string | number;
   color: string;
-  price: number;
+  price: string | number;
   city: string;
-  mileage: number;
+  mileage: string | number;
   user: {
     id: string;
     username: string;

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import authSlice from "./auth-slice";
+
+import authReducer from "./auth-slice";
+import catalogReducer from "./catalog-slice";
 
 const store = configureStore({
-  reducer: { auth: authSlice.reducer },
+  reducer: { auth: authReducer, catalog: catalogReducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

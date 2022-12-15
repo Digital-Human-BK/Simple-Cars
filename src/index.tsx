@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import "./index.css";
 import App from "./App";
 import store from "./store/store";
+import { fetchAllCars } from "./store/catalog-slice";
+store.dispatch(fetchAllCars());
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

@@ -20,17 +20,23 @@ type SearchBarProps = {
   toggleAddCar: () => void;
 };
 
+let isInitial = false;
+
 function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
   const user = useAppSelector(selectUser);
 
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
+    if(isInitial === false) {
+      isInitial = true;
+      return;
+    }
 
     const debounce = setTimeout(() => {
-      onSearch(search);
+        onSearch(search);
     }, 1000);
-
+    
     return () => clearTimeout(debounce);
   }, [search, onSearch]);
 

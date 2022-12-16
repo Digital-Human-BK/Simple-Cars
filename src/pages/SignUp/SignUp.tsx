@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { signUpStyles } from "./styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -15,14 +15,20 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+import { signUpStyles } from "./styles";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
+import { register, login } from "../../store/auth-slice";
+import { useAppDispatch } from "../../store/store";
+import { NewUser } from "../../interfaces/User";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignUp() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [userCredentials, setUserCredentials] = useState({
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [userCredentials, setUserCredentials] = useState<NewUser>({
     firstName: "",
     lastName: "",
     username: "",
@@ -52,14 +58,16 @@ export default function SignUp() {
     event.preventDefault();
 
     try {
-      // await register(userCredentials);
+      await dispatch(register(userCredentials));
 
-      // const user = await login({
-      //   username: userCredentials.username,
-      //   password: userCredentials.password,
-      // });
-
-      // console.log(user);
+      const user = await dispatch(
+        login({
+          username: userCredentials.username,
+          password: userCredentials.password,
+        })
+      );
+      console.log(user);
+      navigate("/catalog");
     } catch (error) {
       alert(error);
     }
@@ -104,7 +112,7 @@ export default function SignUp() {
                   id="firstName"
                   name="firstName"
                   label="First Name"
-                  onChange={(ev) => handleChange(ev, "fistName")}
+                  onChange={(ev) => handleChange(ev, "firstName")}
                 />
               </Grid>
               <Grid

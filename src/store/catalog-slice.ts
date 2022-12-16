@@ -149,7 +149,15 @@ export const deleteCar = createAsyncThunk<string, { carId: string }>(
 const catalogSlice = createSlice({
   name: "catalog",
   initialState,
-  reducers: {},
+  reducers: {
+    searchCars(state, action) {
+      state.cars = state.cars.filter((item) => {
+        return Object.values(item).some((v) =>
+          v.toString().toLowerCase().includes(action.payload)
+        );
+      });
+    },
+  },
   extraReducers: (builder) => {
     //fetch all cars
     builder.addCase(fetchAllCars.pending, (state) => {
@@ -207,6 +215,7 @@ const catalogSlice = createSlice({
   },
 });
 
+export const { searchCars } = catalogSlice.actions;
 export const selectAllCars = (state: RootState) => state.catalog.cars;
 export const selectCatalogLoading = (state: RootState) => state.catalog.loading;
 export const selectCatalogError = (state: RootState) => state.catalog.error;

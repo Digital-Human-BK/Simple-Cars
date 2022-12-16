@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { User } from "../interfaces/User";
+import { LoginUser, NewUser, User } from "../interfaces/User";
 import { BASE_URL, authEndpoints } from "./apiEndpoints";
 import { RootState } from "./store";
 
 interface UserState {
   userData: User | null;
   loading: boolean;
-  error: any; //null | string;
+  error: null | undefined | string;
 }
 
 const initialState: UserState = {
@@ -15,7 +15,7 @@ const initialState: UserState = {
   error: null,
 };
 
-export const login = createAsyncThunk<User, Object>(
+export const login = createAsyncThunk<User, LoginUser>(
   "auth/login",
   async (loginData) => {
     try {
@@ -50,7 +50,7 @@ export const login = createAsyncThunk<User, Object>(
   }
 );
 
-export const register = createAsyncThunk<User, Object>(
+export const register = createAsyncThunk<User, NewUser>(
   "auth/register",
   async (registerData) => {
     try {

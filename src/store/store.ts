@@ -1,11 +1,39 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+import storage from "redux-persist/lib/storage";
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 
 import authReducer from "./auth-slice";
 import catalogReducer from "./catalog-slice";
 
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
+
+const reducer = combineReducers({
+  auth: authReducer,
+  catalog: catalogReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
 const store = configureStore({
-  reducer: { auth: authReducer, catalog: catalogReducer },
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+    },
+  }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

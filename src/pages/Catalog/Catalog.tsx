@@ -5,7 +5,7 @@ import CatalogTable from "../../components/CatalogTable/CatalogTable";
 import NavBar from "../../components/NavBar/NavBar";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { useAppDispatch } from "../../store/store";
-import { createCar, deleteCar, updateCar } from "../../store/catalog-slice";
+import { createCar, deleteCar, fetchAllCars, searchCars, updateCar } from "../../store/catalog-slice";
 import { NewCar } from "../../interfaces/Car";
 
 function Catalog() {
@@ -13,18 +13,14 @@ function Catalog() {
   const [isAddingCar, setIsAddingCar] = useState<boolean>(false);
 
   const searchHandler = useCallback((criteria: string): void => {
-    // const lowerCase = criteria.toLowerCase().trim();
-    // if (lowerCase === "") {
-    //   setCarData(data);
-    // } else {
-    //   const filteredData = data.filter((item) => {
-    //     return Object.values(item).some((v) =>
-    //       v.toString().toLowerCase().includes(lowerCase)
-    //     );
-    //   });
-    //   setCarData(filteredData);
-    // }
-  }, []);
+    const lowerCase = criteria.toLowerCase().trim();
+    
+    if (lowerCase === "") {
+      dispatch(fetchAllCars());
+    } else {
+      dispatch(searchCars(lowerCase))
+    }
+  }, [dispatch]);
 
   const addCarHandler = (newCarData: NewCar) => {
     dispatch(createCar(newCarData));

@@ -31,12 +31,12 @@ export const login = createAsyncThunk<User, LoginUser>(
         throw new Error("Wrong Username or Password");
       }
 
-      if(res.status === 500) {
-        throw new Error("User does not exist")
+      if (res.status === 500) {
+        throw new Error("User does not exist");
       }
 
       if (res.ok) {
-        return await res.json();
+        return res.json();
       } else {
         throw new Error("Something went wrong!");
       }
@@ -50,7 +50,7 @@ export const login = createAsyncThunk<User, LoginUser>(
   }
 );
 
-export const register = createAsyncThunk<User, NewUser>(
+export const register = createAsyncThunk<string, NewUser>(
   "auth/register",
   async (registerData) => {
     try {
@@ -62,12 +62,12 @@ export const register = createAsyncThunk<User, NewUser>(
         body: JSON.stringify(registerData),
       });
 
-      if (res.status === 500) {
+      if (res.status === 500 || res.status === 404) {
         throw new Error("User already exist");
       }
 
       if (res.ok) {
-        return res.json();
+        return "Success";
       } else {
         throw new Error("Something went wrong!");
       }
@@ -76,7 +76,7 @@ export const register = createAsyncThunk<User, NewUser>(
       if (err instanceof Error) {
         message = err.message;
       }
-      return message;
+      throw message;
     }
   }
 );
@@ -90,15 +90,30 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    //login
     builder.addCase(login.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      state.userData = action.payload;
       state.loading = false;
+      state.error = null;
+      state.userData = action.payload;
     });
     builder.addCase(login.rejected, (state, action) => {
-      state.loading = false;     
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    //register
+    builder.addCase(register.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(register.fulfilled, (state) => {
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(register.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
   },

@@ -14,18 +14,25 @@ import {
 import authReducer from "./auth-slice";
 import catalogReducer from "./catalog-slice";
 
-const persistConfig = {
+const rootPersistConfig = {
   key: "root",
   version: 1,
   storage,
+  blacklist: ["auth", "catalog"]
 };
 
-const reducer = combineReducers({
-  auth: authReducer,
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["userData"]
+}
+
+const rootReducer = combineReducers({
+  auth: persistReducer(authPersistConfig ,authReducer),
   catalog: catalogReducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,

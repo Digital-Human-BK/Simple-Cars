@@ -20,7 +20,7 @@ type SearchBarProps = {
   toggleAddCar: () => void;
 };
 
-let isInitial = false;
+let initialLoad = false;
 
 function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
   const user = useAppSelector(selectUser);
@@ -28,10 +28,12 @@ function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    if(isInitial === false) {
-      isInitial = true;
+    if(initialLoad === false) {
+      initialLoad = true;
       return;
     }
+    console.log('search render');
+    
 
     const debounce = setTimeout(() => {
         onSearch(search);

@@ -32,7 +32,6 @@ export default function CatalogTable({
   onDeleteData,
   onDataEdit,
 }: CatalogTableProps) {
-  console.log("render");
   const carData = useAppSelector(selectAllCars);
 
   const [page, setPage] = useState(0);

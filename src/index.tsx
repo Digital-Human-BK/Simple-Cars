@@ -8,10 +8,11 @@ import { persistStore } from "redux-persist";
 import "./index.css";
 import App from "./App";
 import store from "./store/store";
-import { fetchAllCars } from "./store/catalog-slice";
+
+// import { fetchAllCars } from "./store/catalog-slice";
+// store.dispatch(fetchAllCars());
 
 let persistor = persistStore(store);
-store.dispatch(fetchAllCars());
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

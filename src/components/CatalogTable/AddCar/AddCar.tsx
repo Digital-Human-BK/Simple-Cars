@@ -33,7 +33,6 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
       return data;
     } else {
       return {
-        id: Math.random().toString(),
         user: user
       };
     }

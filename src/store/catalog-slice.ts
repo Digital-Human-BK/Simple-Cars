@@ -22,7 +22,7 @@ export const fetchAllCars = createAsyncThunk<Car[]>(
       const response = await fetch(BASE_URL + catalogEndpoints.allCars);
 
       if (response.ok === false) {
-        throw new Error("Something went wrong");
+        throw new Error("Failed to fetch data");
       }
       return response.json();
     } catch (err) {
@@ -165,6 +165,7 @@ const catalogSlice = createSlice({
     });
     builder.addCase(fetchAllCars.fulfilled, (state, action) => {
       state.loading = false;
+      state.error = null;
       state.cars = action.payload;
     });
     builder.addCase(fetchAllCars.rejected, (state, action) => {
@@ -178,6 +179,7 @@ const catalogSlice = createSlice({
     });
     builder.addCase(createCar.fulfilled, (state, action) => {
       state.loading = false;
+      state.error = null;
       state.cars.unshift(action.payload);
     });
     builder.addCase(createCar.rejected, (state, action) => {
@@ -193,6 +195,7 @@ const catalogSlice = createSlice({
       state.cars = state.cars.map((car) =>
         car.id !== action.payload.id ? car : action.payload
       );
+      state.error = null;
       state.loading = false;
     });
     builder.addCase(updateCar.rejected, (state, action) => {
@@ -206,6 +209,7 @@ const catalogSlice = createSlice({
     });
     builder.addCase(deleteCar.fulfilled, (state, action) => {
       state.cars = state.cars.filter((car) => car.id !== action.payload);
+      state.error = null;
       state.loading = false;
     });
     builder.addCase(deleteCar.rejected, (state, action) => {

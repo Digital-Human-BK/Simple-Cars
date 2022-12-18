@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import CatalogTable from "../../components/CatalogTable/CatalogTable";
@@ -15,7 +15,7 @@ function Catalog() {
   const searchHandler = useCallback((criteria: string): void => {
     const lowerCase = criteria.toLowerCase().trim();
     
-    if (lowerCase === "") {
+    if (lowerCase === "") {      
       dispatch(fetchAllCars());
     } else {
       dispatch(searchCars(lowerCase))
@@ -37,6 +37,10 @@ function Catalog() {
   const toggleAddCarHandler = (): void => {
     setIsAddingCar((prev) => !prev);
   };
+
+  useEffect(()=> {
+    dispatch(fetchAllCars());
+  }, [dispatch])
 
   return (
     <Box component="main">

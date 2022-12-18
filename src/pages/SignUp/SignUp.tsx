@@ -14,13 +14,16 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import FormHelperText from "@mui/material/FormHelperText";
 
 import { signUpStyles } from "./styles";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
+
 import { register, login } from "../../store/auth-slice";
 import { useAppDispatch } from "../../store/store";
-import { NewUser } from "../../interfaces/User";
+import { NewUser, InputsTouched } from "../../interfaces/User";
+import { validateRegister } from "../../helpers/validateRegister";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -28,12 +31,20 @@ export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [inputsTouched, setInputsTouched] = useState<InputsTouched>({
+    firstName: false,
+    lastName: false,
+    username: false,
+    password: false,
+  });
   const [userCredentials, setUserCredentials] = useState<NewUser>({
     firstName: "",
     lastName: "",
     username: "",
     password: "",
   });
+
+  const inputErrors = validateRegister(userCredentials, inputsTouched);
 
   const handleToggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -46,7 +57,10 @@ export default function SignUp() {
   };
 
   const handleChange = (ev: ChangeEvent, key: string) => {
-    console.log(ev.target.value);
+    setInputsTouched((prevState) => ({
+      ...prevState,
+      [key]: true,
+    }));
 
     setUserCredentials((prevState) => ({
       ...prevState,
@@ -57,20 +71,14 @@ export default function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      await dispatch(register(userCredentials));
-
-      const user = await dispatch(
-        login({
-          username: userCredentials.username,
-          password: userCredentials.password,
-        })
-      );
-      console.log(user);
-      navigate("/catalog");
-    } catch (error) {
-      alert(error);
-    }
+    await dispatch(register(userCredentials)).unwrap();
+    await dispatch(
+      login({
+        username: userCredentials.username,
+        password: userCredentials.password,
+      })
+    ).unwrap();
+    navigate("/catalog");
   };
 
   return (
@@ -112,6 +120,8 @@ export default function SignUp() {
                   id="firstName"
                   name="firstName"
                   label="First Name"
+                  error={!!inputErrors.firstNameError}
+                  helperText={inputErrors.firstNameError}
                   onChange={(ev) => handleChange(ev, "firstName")}
                 />
               </Grid>
@@ -126,6 +136,8 @@ export default function SignUp() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
+                  error={!!inputErrors.lastNameError}
+                  helperText={inputErrors.lastNameError}
                   onChange={(ev) => handleChange(ev, "lastName")}
                 />
               </Grid>
@@ -139,6 +151,8 @@ export default function SignUp() {
                   id="username"
                   label="Username"
                   name="username"
+                  error={!!inputErrors.usernameError}
+                  helperText={inputErrors.usernameError}
                   onChange={(ev) => handleChange(ev, "username")}
                 />
               </Grid>
@@ -150,7 +164,10 @@ export default function SignUp() {
                   variant="outlined"
                   fullWidth
                 >
-                  <InputLabel htmlFor="outlined-adornment-password">
+                  <InputLabel
+                    htmlFor="outlined-adornment-password"
+                    error={!!inputErrors.passwordError}
+                  >
                     Password
                   </InputLabel>
                   <OutlinedInput
@@ -158,6 +175,7 @@ export default function SignUp() {
                     type={showPassword ? "text" : "password"}
                     value={userCredentials.password}
                     onChange={(ev) => handleChange(ev, "password")}
+                    error={!!inputErrors.passwordError}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -172,6 +190,9 @@ export default function SignUp() {
                     }
                     label="Password"
                   />
+                  <FormHelperText error>
+                    {inputErrors.passwordError}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
             </Grid>
@@ -180,6 +201,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={signUpStyles.submit}
+              disabled={inputErrors.formDisabled}
             >
               Sign Up
             </Button>

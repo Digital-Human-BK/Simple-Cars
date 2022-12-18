@@ -11,7 +11,7 @@ interface catalogEndpointsObject {
 
 export const authEndpoints: authEndpointsObject = {
   login: "/users/login",
-  register: "/users/registerr",
+  register: "/users/register",
 };
 
 export const catalogEndpoints: catalogEndpointsObject = {

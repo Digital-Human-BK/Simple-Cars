@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { signInStyles } from "./styles";
 import Button from "@mui/material/Button";
@@ -14,13 +15,20 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import FormHelperText from "@mui/material/FormHelperText";
 
 import logo from "../../assets/logo.png";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
-import { login } from "../../store/auth-slice";
-import { useAppDispatch } from "../../store/store";
-import { useNavigate } from "react-router-dom";
+
+import {
+  login,
+  selectAuthError,
+  selectAuthLoading,
+} from "../../store/auth-slice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { LoginUser, InputsTouched } from "../../interfaces/User";
+import { validateLogin } from "../../helpers/validateLogin";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -28,11 +36,21 @@ export default function SignIn() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [userCredentials, setUserCredentials] = useState({
+  const loading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  
+  const [inputsTouched, setInputsTouched] = useState<InputsTouched>({
+    username: false,
+    password: false,
+  });
+  const [userCredentials, setUserCredentials] = useState<LoginUser>({
     username: "",
     password: "",
   });
+
+  const inputErrors = validateLogin(userCredentials, inputsTouched);
 
   const handleToggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -45,6 +63,10 @@ export default function SignIn() {
   };
 
   const handleChange = (ev: ChangeEvent, key: string) => {
+    setInputsTouched((prevState) => ({
+      ...prevState,
+      [key]: true,
+    }));
     setUserCredentials((prevState) => ({
       ...prevState,
       [key]: ev.target.value,
@@ -53,12 +75,9 @@ export default function SignIn() {
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    try {
-      await dispatch(login(userCredentials));
-      navigate("/catalog");
-    } catch (error) {
-      alert(error);
-    }
+
+    await dispatch(login(userCredentials)).unwrap();
+    navigate("/catalog");
   };
 
   return (
@@ -79,6 +98,8 @@ export default function SignIn() {
           >
             Sign In
           </Typography>
+          <Typography>{error}</Typography>
+          <Typography>{loading.toString()}</Typography>
           <Box
             component="form"
             noValidate
@@ -102,6 +123,8 @@ export default function SignIn() {
                   autoFocus
                   onChange={(ev) => handleChange(ev, "username")}
                   value={userCredentials.username}
+                  error={!!inputErrors.usernameError}
+                  helperText={inputErrors.usernameError}
                 />
               </Grid>
               <Grid
@@ -112,7 +135,10 @@ export default function SignIn() {
                   variant="outlined"
                   fullWidth
                 >
-                  <InputLabel htmlFor="outlined-adornment-password">
+                  <InputLabel
+                    htmlFor="outlined-adornment-password"
+                    error={!!inputErrors.passwordError}
+                  >
                     Password
                   </InputLabel>
                   <OutlinedInput
@@ -120,6 +146,7 @@ export default function SignIn() {
                     type={showPassword ? "text" : "password"}
                     value={userCredentials.password}
                     onChange={(ev) => handleChange(ev, "password")}
+                    error={!!inputErrors.passwordError}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -134,6 +161,9 @@ export default function SignIn() {
                     }
                     label="Password"
                   />
+                  <FormHelperText error>
+                    {inputErrors.passwordError}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
             </Grid>
@@ -142,6 +172,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={signInStyles.submit}
+              disabled={inputErrors.formDisabled}
             >
               Sign In
             </Button>

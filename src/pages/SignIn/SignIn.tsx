@@ -29,6 +29,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { LoginUser, InputsTouched } from "../../interfaces/User";
 import { validateLogin } from "../../helpers/validateLogin";
+import Toast from "../../components/common/Toast/Toast";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -98,8 +99,6 @@ export default function SignIn() {
           >
             Sign In
           </Typography>
-          <Typography>{error}</Typography>
-          <Typography>{loading.toString()}</Typography>
           <Box
             component="form"
             noValidate
@@ -210,6 +209,7 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 0 }} />
       </Container>
+      <Toast error={error} loading={loading}/>
     </Box>
   );
 }

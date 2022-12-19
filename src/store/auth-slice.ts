@@ -88,6 +88,9 @@ const authSlice = createSlice({
     logout() {
       return initialState;
     },
+    resetError(state) {
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     //login
@@ -119,7 +122,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, resetError } = authSlice.actions;
 export const selectUser = (state: RootState) => state.auth.userData?.user;
 export const selectToken = (state: RootState) => state.auth.userData?.jwtToken;
 export const selectAuthLoading = (state: RootState) => state.auth.loading;

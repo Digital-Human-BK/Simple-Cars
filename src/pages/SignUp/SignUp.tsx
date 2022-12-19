@@ -20,16 +20,26 @@ import { signUpStyles } from "./styles";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
-import { register, login } from "../../store/auth-slice";
-import { useAppDispatch } from "../../store/store";
+import {
+  register,
+  login,
+  selectAuthError,
+  selectAuthLoading,
+} from "../../store/auth-slice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import { NewUser, InputsTouched } from "../../interfaces/User";
 import { validateRegister } from "../../helpers/validateRegister";
+import Toast from "../../components/common/Toast/Toast";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const loading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [inputsTouched, setInputsTouched] = useState<InputsTouched>({
     firstName: false,
@@ -219,6 +229,10 @@ export default function SignUp() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
+        <Toast
+          error={error}
+          loading={loading}
+        />
     </Box>
   );
 }

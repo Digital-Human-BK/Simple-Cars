@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import InputAdornment from "@mui/material/InputAdornment";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 
 import { useAppSelector } from "../../store/store";
@@ -86,13 +87,15 @@ function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
             }}
           />
           {user && (
+            <Tooltip title="Add new Car">
             <IconButton onClick={toggleAddCar}>
               {isAddingCar ? (
                 <DoNotDisturbOnIcon color="secondary" />
               ) : (
-                <AddBoxIcon color="success" />
+                <AddBoxIcon color="primary" />
               )}
             </IconButton>
+            </Tooltip>
           )}
         </Box>
       </Grid>

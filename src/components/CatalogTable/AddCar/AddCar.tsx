@@ -7,14 +7,16 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+import Toast from "../../common/Toast/Toast";
 import { Car, NewCar } from "../../../interfaces/Car";
-import { useAppSelector } from "../../../store/store";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { selectUser } from "../../../store/auth-slice";
 import { validateAddCar } from "../../../helpers/validateAddCar";
-import Toast from "../../common/Toast/Toast";
+import { createCar, updateCar } from "../../../store/catalog-slice";
 
 type ChangeEvent =
   | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -22,12 +24,11 @@ type ChangeEvent =
 
 type AddCarProps = {
   toggleMenu: () => void;
-  onAddNewData?: (data: any) => void;
-  onDataEdit?: (data: any) => void;
   data?: Car;
 };
 
-function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
+function AddCar({ toggleMenu, data }: AddCarProps) {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   const [inputsTouched, setInputsTouched] = useState<boolean>(false);
@@ -72,7 +73,7 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
 
   const handleAddCar = () => {
     console.log(newCarData);
-    
+
     const formIsValid = validateAddCar(newCarData);
 
     if (formIsValid === false) {
@@ -80,11 +81,10 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
       setInputsError("Please fill all fields");
       return;
     }
-    if (onDataEdit) {
-      onDataEdit(newCarData);
-    }
-    if (onAddNewData) {
-      onAddNewData(newCarData);
+    if (data) {
+      dispatch(updateCar(newCarData));
+    } else {
+      dispatch(createCar(newCarData));
     }
     toggleMenu();
   };
@@ -97,15 +97,18 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
       />
       <TableCell style={{ width: 160 }}>
         <Box>
-          <DoneIcon
-            onClick={handleAddCar}
-            sx={{ mr: "5px", cursor: "pointer" }}
-          />
-
-          <CloseIcon
-            onClick={toggleMenu}
-            sx={{ cursor: "pointer" }}
-          />
+          <Tooltip title="Ok">
+            <DoneIcon
+              onClick={handleAddCar}
+              sx={{ mr: "5px", cursor: "pointer" }}
+            />
+          </Tooltip>
+          <Tooltip title="Cancel">
+            <CloseIcon
+              onClick={toggleMenu}
+              sx={{ cursor: "pointer" }}
+            />
+          </Tooltip>
         </Box>
       </TableCell>
       <TableCell style={{ width: 160 }}>

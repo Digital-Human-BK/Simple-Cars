@@ -5,42 +5,32 @@ import CatalogTable from "../../components/CatalogTable/CatalogTable";
 import NavBar from "../../components/NavBar/NavBar";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { useAppDispatch } from "../../store/store";
-import { createCar, deleteCar, fetchAllCars, searchCars, updateCar } from "../../store/catalog-slice";
-import { NewCar } from "../../interfaces/Car";
+import { fetchAllCars, searchCars } from "../../store/catalog-slice";
 
 function Catalog() {
   const dispatch = useAppDispatch();
   const [isAddingCar, setIsAddingCar] = useState<boolean>(false);
 
-  const searchHandler = useCallback((criteria: string): void => {
-    const lowerCase = criteria.toLowerCase().trim();
-    
-    if (lowerCase === "") {      
-      dispatch(fetchAllCars());
-    } else {
-      dispatch(searchCars(lowerCase))
-    }
-  }, [dispatch]);
+  const searchHandler = useCallback(
+    (criteria: string): void => {
+      const lowerCase = criteria.toLowerCase().trim();
 
-  const addCarHandler = (newCarData: NewCar) => {
-    dispatch(createCar(newCarData));
-  };
-
-  const editHandler = (newCarData: NewCar) => {
-    dispatch(updateCar(newCarData));
-  };
-
-  const deleteCarHandler = (carId: string) => {
-    dispatch(deleteCar({carId}));
-  };
+      if (lowerCase === "") {
+        dispatch(fetchAllCars());
+      } else {
+        dispatch(searchCars(lowerCase));
+      }
+    },
+    [dispatch]
+  );
 
   const toggleAddCarHandler = (): void => {
     setIsAddingCar((prev) => !prev);
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     dispatch(fetchAllCars());
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <Box component="main">
@@ -53,9 +43,6 @@ function Catalog() {
       <CatalogTable
         isAddingCar={isAddingCar}
         toggleMenu={toggleAddCarHandler}
-        onAddNewData={addCarHandler}
-        onDataEdit={editHandler}
-        onDeleteData={deleteCarHandler}
       />
     </Box>
   );

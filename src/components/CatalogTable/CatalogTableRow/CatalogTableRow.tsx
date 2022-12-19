@@ -4,35 +4,44 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import { Car } from "../../../interfaces/Car";
 import { selectUser } from "../../../store/auth-slice";
-import { useAppSelector } from "../../../store/store";
+import { deleteCar } from "../../../store/catalog-slice";
+import { useAppSelector, useAppDispatch } from "../../../store/store";
+
 import AddCar from "../AddCar/AddCar";
+import AlertDialog from "../../common/AlertDialog/AlertDialog";
 
 type CatalogTableRowProps = {
-  row: Car;
-  onDeleteData: (id: string) => void;
-  onDataEdit: (data: any)=> void;
+  car: Car;
 };
 
-function CatalogTableRow({ row, onDeleteData, onDataEdit }: CatalogTableRowProps) {
-  const [isEditing, setIsEditing] = useState(false);
+function CatalogTableRow({ car }: CatalogTableRowProps) {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const isOwner = user?.id === row.user.id;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const isOwner = user?.id === car.user.id;
 
   const ownerControls = (
     <Box>
-      <EditIcon
-        onClick={() => setIsEditing(true)}
-        sx={{ mr: "5px", cursor: "pointer" }}
-      />
-
-      <DeleteOutlineIcon
-        onClick={()=> onDeleteData(row.id)}
-        sx={{ cursor: "pointer" }}
-      />
+      <Tooltip title="Edit">
+        <EditIcon
+          onClick={() => setIsEditing(true)}
+          sx={{ mr: "5px", cursor: "pointer" }}
+        />
+      </Tooltip>
+      <Tooltip title="Delete">
+        <DeleteOutlineIcon
+          onClick={() => setIsDeleting(true)}
+          sx={{ cursor: "pointer" }}
+        />
+      </Tooltip>
     </Box>
   );
 
@@ -40,26 +49,31 @@ function CatalogTableRow({ row, onDeleteData, onDataEdit }: CatalogTableRowProps
     return (
       <AddCar
         toggleMenu={() => setIsEditing(false)}
-        onDataEdit={onDataEdit}
-        data={row}
+        data={car}
       />
     );
   }
   return (
-    <TableRow key={row.id}>
+    <TableRow key={car.id}>
+      <AlertDialog
+        open={isDeleting}
+        message={"You are about to delete this car from the catalog!"}
+        onClose={() => setIsDeleting(false)}
+        onConfirm={() => dispatch(deleteCar({ carId: car.id }))}
+      />
       <TableCell style={{ width: 160 }}>{isOwner && ownerControls}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.make}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.model}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.year}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.engineType}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.gearBox}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.condition}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.horsePower}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.color}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.price}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.city}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.mileage}</TableCell>
-      <TableCell style={{ width: 160 }}>{row.extras}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.make}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.model}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.year}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.engineType}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.gearBox}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.condition}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.horsePower}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.color}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.price}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.city}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.mileage}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.extras}</TableCell>
     </TableRow>
   );
 }

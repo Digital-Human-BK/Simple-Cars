@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { signInStyles } from "./styles";
@@ -25,6 +25,7 @@ import {
   login,
   selectAuthError,
   selectAuthLoading,
+  selectUser,
 } from "../../store/auth-slice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { LoginUser, InputsTouched } from "../../interfaces/User";
@@ -37,6 +38,7 @@ export default function SignIn() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const user = useAppSelector(selectUser);
   const loading = useAppSelector(selectAuthLoading);
   const error = useAppSelector(selectAuthError);
 
@@ -78,8 +80,13 @@ export default function SignIn() {
     ev.preventDefault();
 
     await dispatch(login(userCredentials)).unwrap();
-    navigate("/catalog");
   };
+
+  useEffect(()=> {
+    if(user){
+      navigate('/catalog', {replace: true})
+    }
+  }, [user, navigate])
 
   return (
     <Box

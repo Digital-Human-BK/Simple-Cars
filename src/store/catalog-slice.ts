@@ -35,9 +35,9 @@ export const fetchAllCars = createAsyncThunk<Car[]>(
   }
 );
 
-export const createCar = createAsyncThunk<Car, NewCar>(
+export const createCar = createAsyncThunk<Car, NewCar | Car>(
   "catalog/createCar",
-  async (carData: NewCar, thunkAPI) => {
+  async (carData: NewCar | Car, thunkAPI) => {
     carData.year = Number(carData.year);
     carData.horsePower = Number(carData.horsePower);
     carData.price = Number(carData.price);
@@ -75,9 +75,9 @@ export const createCar = createAsyncThunk<Car, NewCar>(
   }
 );
 
-export const updateCar = createAsyncThunk<Car, NewCar>(
+export const updateCar = createAsyncThunk<Car, NewCar | Car>(
   "catalog/updateCar",
-  async (updatedCarData: NewCar, thunkAPI) => {
+  async (updatedCarData: NewCar | Car, thunkAPI) => {
     updatedCarData.year = Number(updatedCarData.year);
     updatedCarData.horsePower = Number(updatedCarData.horsePower);
     updatedCarData.price = Number(updatedCarData.price);

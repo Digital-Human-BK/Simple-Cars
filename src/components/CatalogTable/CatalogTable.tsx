@@ -20,17 +20,11 @@ import CatalogTableNotification from "./CatalogTableNotification/CatalogTableNot
 type CatalogTableProps = {
   isAddingCar: boolean;
   toggleMenu: () => void;
-  onAddNewData: (data: any) => void;
-  onDeleteData: (id: string) => void;
-  onDataEdit: (data: any) => void;
 };
 
 export default function CatalogTable({
   isAddingCar,
   toggleMenu,
-  onAddNewData,
-  onDeleteData,
-  onDataEdit,
 }: CatalogTableProps) {
   const carData = useAppSelector(selectAllCars);
 
@@ -67,7 +61,6 @@ export default function CatalogTable({
           {isAddingCar && (
             <AddCar
               toggleMenu={toggleMenu}
-              onAddNewData={onAddNewData}
             />
           )}
           {(rowsPerPage > 0
@@ -76,12 +69,10 @@ export default function CatalogTable({
                 page * rowsPerPage + rowsPerPage
               )
             : carData
-          ).map((row) => (
+          ).map((car) => (
             <CatalogTableRow
-              key={row.id}
-              row={row}
-              onDeleteData={onDeleteData}
-              onDataEdit={onDataEdit}
+              key={car.id}
+              car={car}
             />
           ))}
           {emptyRows > 0 && (

@@ -68,7 +68,7 @@ function CatalogTableRow({ car }: CatalogTableRowProps) {
       <TableCell style={{ width: 160 }}>{car.engineType}</TableCell>
       <TableCell style={{ width: 160 }}>{car.gearBox}</TableCell>
       <TableCell style={{ width: 160 }}>{car.condition}</TableCell>
-      <TableCell style={{ width: 160 }}>{car.horsePower}</TableCell>
+      <TableCell style={{ width: 160 }}>{car.horsePower}hp</TableCell>
       <TableCell style={{ width: 160 }}>{car.color}</TableCell>
       <TableCell style={{ width: 160 }}>{car.price}</TableCell>
       <TableCell style={{ width: 160 }}>{car.city}</TableCell>

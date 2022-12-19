@@ -197,7 +197,7 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
       <TableCell>
         <TextField
           variant="standard"
-          placeholder="Horse Power"
+          placeholder="Power"
           type="number"
           name="horsePower"
           value={newCarData.horsePower}

@@ -11,7 +11,7 @@ const columns: readonly TableColumns[] = [
   { id: "engine", label: "Engine Type", minWidth: 110 },
   { id: "gearbox", label: "Gear Box", minWidth: 120 },
   { id: "condition", label: "Condition", minWidth: 85 },
-  { id: "hp", label: "Horse Power", minWidth: 100 },
+  { id: "hp", label: "Power", minWidth: 60 },
   { id: "color", label: "Color", minWidth: 60 },
   { id: "price", label: "Price $", minWidth: 65 },
   { id: "city", label: "City", minWidth: 65 },

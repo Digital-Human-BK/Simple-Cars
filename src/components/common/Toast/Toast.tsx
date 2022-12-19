@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import React, { useEffect, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps, AlertColor } from "@mui/material/Alert";
@@ -29,12 +30,12 @@ type AlertContent = {
   severity: AlertColor | undefined;
 };
 
-export default function Toast({ error, loading }: ToastProps) {
+function ToastComponent({ error, loading }: ToastProps) {
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState<boolean>(false);
   const [alertContent, setAlertContent] = useState<AlertContent>({
-    message: "",
+    message: "Pending",
     severity: "info",
   });
 
@@ -82,5 +83,15 @@ export default function Toast({ error, loading }: ToastProps) {
         {alertContent.message}
       </Alert>
     </Snackbar>
+  );
+}
+
+export default function Toast({ error, loading }: ToastProps) {
+  return ReactDOM.createPortal(
+    <ToastComponent
+      error={error}
+      loading={loading}
+    />,
+    document.getElementById("overlays") as HTMLElement
   );
 }

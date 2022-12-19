@@ -66,15 +66,15 @@ export default function SignUp() {
     event.preventDefault();
   };
 
-  const handleChange = (ev: ChangeEvent, key: string) => {
+  const handleChange = (ev: ChangeEvent) => {
     setInputsTouched((prevState) => ({
       ...prevState,
-      [key]: true,
+      [ev.target.name]: true,
     }));
 
     setUserCredentials((prevState) => ({
       ...prevState,
-      [key]: ev.target.value,
+      [ev.target.name]: ev.target.value,
     }));
   };
 
@@ -132,7 +132,7 @@ export default function SignUp() {
                   label="First Name"
                   error={!!inputErrors.firstNameError}
                   helperText={inputErrors.firstNameError}
-                  onChange={(ev) => handleChange(ev, "firstName")}
+                  onChange={(ev) => handleChange(ev)}
                 />
               </Grid>
               <Grid
@@ -148,7 +148,7 @@ export default function SignUp() {
                   name="lastName"
                   error={!!inputErrors.lastNameError}
                   helperText={inputErrors.lastNameError}
-                  onChange={(ev) => handleChange(ev, "lastName")}
+                  onChange={(ev) => handleChange(ev)}
                 />
               </Grid>
               <Grid
@@ -163,7 +163,7 @@ export default function SignUp() {
                   name="username"
                   error={!!inputErrors.usernameError}
                   helperText={inputErrors.usernameError}
-                  onChange={(ev) => handleChange(ev, "username")}
+                  onChange={(ev) => handleChange(ev)}
                 />
               </Grid>
               <Grid
@@ -181,10 +181,11 @@ export default function SignUp() {
                     Password
                   </InputLabel>
                   <OutlinedInput
+                    name="password"
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     value={userCredentials.password}
-                    onChange={(ev) => handleChange(ev, "password")}
+                    onChange={(ev) => handleChange(ev)}
                     error={!!inputErrors.passwordError}
                     endAdornment={
                       <InputAdornment position="end">
@@ -229,10 +230,10 @@ export default function SignUp() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-        <Toast
-          error={error}
-          loading={loading}
-        />
+      <Toast
+        error={error}
+        loading={loading}
+      />
     </Box>
   );
 }

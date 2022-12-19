@@ -1,8 +1,5 @@
-import { NewCar } from "../interfaces/Car";
+import { Car, NewCar } from "../interfaces/Car";
 
-export function validateAddCar(carData: NewCar) {
-  
-  for (const key in carData) {
-
-  }
+export function validateAddCar(carData: NewCar | Car) {
+  return Object.values(carData).every((value) => Boolean(value) !== false);
 }

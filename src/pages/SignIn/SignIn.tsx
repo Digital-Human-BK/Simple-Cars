@@ -41,7 +41,7 @@ export default function SignIn() {
   const error = useAppSelector(selectAuthError);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  
+
   const [inputsTouched, setInputsTouched] = useState<InputsTouched>({
     username: false,
     password: false,
@@ -63,14 +63,14 @@ export default function SignIn() {
     event.preventDefault();
   };
 
-  const handleChange = (ev: ChangeEvent, key: string) => {
+  const handleChange = (ev: ChangeEvent) => {
     setInputsTouched((prevState) => ({
       ...prevState,
-      [key]: true,
+      [ev.target.name]: true,
     }));
     setUserCredentials((prevState) => ({
       ...prevState,
-      [key]: ev.target.value,
+      [ev.target.name]: ev.target.value,
     }));
   };
 
@@ -120,7 +120,7 @@ export default function SignIn() {
                   label="Username"
                   name="username"
                   autoFocus
-                  onChange={(ev) => handleChange(ev, "username")}
+                  onChange={(ev) => handleChange(ev)}
                   value={userCredentials.username}
                   error={!!inputErrors.usernameError}
                   helperText={inputErrors.usernameError}
@@ -142,9 +142,10 @@ export default function SignIn() {
                   </InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     value={userCredentials.password}
-                    onChange={(ev) => handleChange(ev, "password")}
+                    onChange={(ev) => handleChange(ev)}
                     error={!!inputErrors.passwordError}
                     endAdornment={
                       <InputAdornment position="end">
@@ -209,7 +210,10 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 0 }} />
       </Container>
-      <Toast error={error} loading={loading}/>
+      <Toast
+        error={error}
+        loading={loading}
+      />
     </Box>
   );
 }

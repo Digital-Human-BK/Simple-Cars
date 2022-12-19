@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginUser, NewUser, User } from "../interfaces/User";
-import { BASE_URL, authEndpoints } from "./apiEndpoints";
+import { BASE_URL, authEndpoints } from "../constants/apiEndpoints";
 import { RootState } from "./store";
 
 interface UserState {

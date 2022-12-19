@@ -10,9 +10,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-import { Car } from "../../../interfaces/Car";
+import { Car, NewCar } from "../../../interfaces/Car";
 import { useAppSelector } from "../../../store/store";
 import { selectUser } from "../../../store/auth-slice";
+import { validateAddCar } from "../../../helpers/validateAddCar";
+import Toast from "../../common/Toast/Toast";
 
 type ChangeEvent =
   | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -27,35 +29,76 @@ type AddCarProps = {
 
 function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
   const user = useAppSelector(selectUser);
-  
-  const [newCar, setNewCar] = useState(() => {
+
+  const [inputsTouched, setInputsTouched] = useState<boolean>(false);
+  const [inputsError, setInputsError] = useState<null | string>(null);
+
+  const [newCarData, setNewCar] = useState<Car | NewCar>(() => {
     if (data) {
       return data;
     } else {
       return {
-        user: user
+        id: "1",
+        make: "",
+        model: "",
+        year: "",
+        engineType: "",
+        gearBox: "",
+        condition: "",
+        horsePower: "",
+        color: "",
+        price: "",
+        city: "",
+        mileage: "",
+        user: {
+          id: user!.id,
+          username: user!.username,
+          password: user!.password,
+          firstName: user!.firstName,
+          lastName: user!.lastName,
+        },
+        extras: "",
       };
     }
   });
 
-  const handleChange = (ev: ChangeEvent, key: string) => {
-    setNewCar((prevState) => ({ ...prevState, [key]: ev.target.value }));
+  const handleChange = (ev: ChangeEvent) => {
+    setInputsTouched(true);
+    setNewCar((prevState) => ({
+      ...prevState,
+      [ev.target.name]: ev.target.value,
+    }));
+  };
+
+  const handleAddCar = () => {
+    console.log(newCarData);
+    
+    const formIsValid = validateAddCar(newCarData);
+
+    if (formIsValid === false) {
+      setInputsTouched(true);
+      setInputsError("Please fill all fields");
+      return;
+    }
+    if (onDataEdit) {
+      onDataEdit(newCarData);
+    }
+    if (onAddNewData) {
+      onAddNewData(newCarData);
+    }
+    toggleMenu();
   };
 
   return (
     <TableRow>
+      <Toast
+        error={inputsError}
+        loading={false}
+      />
       <TableCell style={{ width: 160 }}>
         <Box>
           <DoneIcon
-            onClick={() => {
-              if (onDataEdit) {
-                onDataEdit(newCar);
-              }
-              if (onAddNewData) {
-                onAddNewData(newCar);
-              }
-              toggleMenu();
-            }}
+            onClick={handleAddCar}
             sx={{ mr: "5px", cursor: "pointer" }}
           />
 
@@ -70,8 +113,10 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           variant="standard"
           placeholder="Make"
           type="text"
-          defaultValue={data?.make}
-          onChange={(ev) => handleChange(ev, "make")}
+          name="make"
+          value={newCarData.make}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.make}
         />
       </TableCell>
       <TableCell>
@@ -79,8 +124,10 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           variant="standard"
           placeholder="Model"
           type="text"
-          defaultValue={data?.model}
-          onChange={(ev) => handleChange(ev, "model")}
+          name="model"
+          value={newCarData.model}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.model}
         />
       </TableCell>
       <TableCell>
@@ -88,8 +135,10 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           variant="standard"
           placeholder="Year"
           type="number"
-          defaultValue={data?.year}
-          onChange={(ev) => handleChange(ev, "year")}
+          name="year"
+          value={newCarData.year}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.year}
         />
       </TableCell>
       <TableCell>
@@ -98,12 +147,15 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           sx={{ minWidth: 85 }}
         >
           <Select
-            defaultValue={data?.engineType ? data.engineType : ""}
-            onChange={(ev: SelectChangeEvent) => handleChange(ev, "engineType")}
+            name="engineType"
+            value={newCarData.engineType}
+            onChange={(ev: SelectChangeEvent) => handleChange(ev)}
+            error={inputsTouched && !newCarData.engineType}
           >
             <MenuItem value="DIESEL">DIESEL</MenuItem>
             <MenuItem value="GASOLINE">GASOLINE</MenuItem>
             <MenuItem value="HYBRID">HYBRID</MenuItem>
+            <MenuItem value="ELECTRIC">ELECTRIC</MenuItem>
           </Select>
         </FormControl>
       </TableCell>
@@ -113,8 +165,10 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           sx={{ minWidth: 85 }}
         >
           <Select
-            defaultValue={data?.gearBox ? data.gearBox : ""}
-            onChange={(ev: SelectChangeEvent) => handleChange(ev, "gearBox")}
+            name="gearBox"
+            value={newCarData.gearBox}
+            onChange={(ev: SelectChangeEvent) => handleChange(ev)}
+            error={inputsTouched && !newCarData.gearBox}
           >
             <MenuItem value="MANUAL">MANUAL</MenuItem>
             <MenuItem value="AUTOMATIC">AUTOMATIC</MenuItem>
@@ -127,8 +181,10 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           sx={{ minWidth: 85 }}
         >
           <Select
-            defaultValue={data?.condition ? data.condition : ""}
-            onChange={(ev: SelectChangeEvent) => handleChange(ev, "condition")}
+            name="condition"
+            value={newCarData.condition}
+            onChange={(ev: SelectChangeEvent) => handleChange(ev)}
+            error={inputsTouched && !newCarData.condition}
           >
             <MenuItem value="NEW">NEW</MenuItem>
             <MenuItem value="USED">USED</MenuItem>
@@ -140,16 +196,20 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           variant="standard"
           placeholder="Horse Power"
           type="number"
-          defaultValue={data?.horsePower}
-          onChange={(ev) => handleChange(ev, "horsePower")}
+          name="horsePower"
+          value={newCarData.horsePower}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.horsePower}
         />
       </TableCell>
       <TableCell>
         <TextField
           variant="standard"
           placeholder="Color"
-          defaultValue={data?.color}
-          onChange={(ev) => handleChange(ev, "color")}
+          name="color"
+          value={newCarData.color}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.color}
         />
       </TableCell>
       <TableCell>
@@ -157,16 +217,20 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           variant="standard"
           placeholder="Price $"
           type="number"
-          defaultValue={data?.price}
-          onChange={(ev) => handleChange(ev, "price")}
+          name="price"
+          value={newCarData.price}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.price}
         />
       </TableCell>
       <TableCell>
         <TextField
           variant="standard"
           placeholder="City"
-          defaultValue={data?.city}
-          onChange={(ev) => handleChange(ev, "city")}
+          name="city"
+          value={newCarData.city}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.city}
         />
       </TableCell>
       <TableCell>
@@ -174,16 +238,20 @@ function AddCar({ toggleMenu, onDataEdit, onAddNewData, data }: AddCarProps) {
           variant="standard"
           placeholder="Mileage"
           type="number"
-          defaultValue={data?.mileage}
-          onChange={(ev) => handleChange(ev, "mileage")}
+          name="mileage"
+          value={newCarData.mileage}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.mileage}
         />
       </TableCell>
       <TableCell>
         <TextField
           variant="standard"
           placeholder="Extras"
-          defaultValue={data?.extras}
-          onChange={(ev) => handleChange(ev, "extras")}
+          name="extras"
+          value={newCarData.extras}
+          onChange={(ev) => handleChange(ev)}
+          error={inputsTouched && !newCarData.extras}
         />
       </TableCell>
     </TableRow>

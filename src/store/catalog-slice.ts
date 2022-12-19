@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Car, NewCar } from "../interfaces/Car";
-import { BASE_URL, catalogEndpoints } from "./apiEndpoints";
+import { BASE_URL, catalogEndpoints } from "../constants/apiEndpoints";
 import { RootState } from "./store";
 
 interface CatalogState {
@@ -60,6 +60,10 @@ export const createCar = createAsyncThunk<Car, NewCar>(
         body: JSON.stringify(carData),
       });
 
+      if(res.ok === false) {
+        throw new Error("Something went wrong!")
+      }
+
       return res.json();
     } catch (err) {
       let message = "Unknown Error";
@@ -96,6 +100,10 @@ export const updateCar = createAsyncThunk<Car, NewCar>(
         },
         body: JSON.stringify(updatedCarData),
       });
+
+      if(res.ok === false) {
+        throw new Error("Something went wrong!")
+      }
 
       return res.json();
     } catch (err) {

@@ -117,7 +117,7 @@ export default function SignUp() {
           >
             <Grid
               container
-              spacing={2}
+              spacing={4}
             >
               <Grid
                 item
@@ -131,7 +131,7 @@ export default function SignUp() {
                   name="firstName"
                   label="First Name"
                   error={!!inputErrors.firstNameError}
-                  helperText={inputErrors.firstNameError || " "}
+                  helperText={inputErrors.firstNameError}
                   onChange={(ev) => handleChange(ev, "firstName")}
                 />
               </Grid>
@@ -147,7 +147,7 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastName"
                   error={!!inputErrors.lastNameError}
-                  helperText={inputErrors.lastNameError || " "}
+                  helperText={inputErrors.lastNameError}
                   onChange={(ev) => handleChange(ev, "lastName")}
                 />
               </Grid>
@@ -162,7 +162,7 @@ export default function SignUp() {
                   label="Username"
                   name="username"
                   error={!!inputErrors.usernameError}
-                  helperText={inputErrors.usernameError || " "}
+                  helperText={inputErrors.usernameError}
                   onChange={(ev) => handleChange(ev, "username")}
                 />
               </Grid>
@@ -201,7 +201,7 @@ export default function SignUp() {
                     label="Password"
                   />
                   <FormHelperText error>
-                    {inputErrors.passwordError || " "}
+                    {inputErrors.passwordError}
                   </FormHelperText>
                 </FormControl>
               </Grid>

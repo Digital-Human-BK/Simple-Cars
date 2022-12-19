@@ -107,7 +107,7 @@ export default function SignIn() {
           >
             <Grid
               container
-              spacing={2}
+              spacing={4}
             >
               <Grid
                 item
@@ -123,7 +123,7 @@ export default function SignIn() {
                   onChange={(ev) => handleChange(ev, "username")}
                   value={userCredentials.username}
                   error={!!inputErrors.usernameError}
-                  helperText={inputErrors.usernameError || " "}
+                  helperText={inputErrors.usernameError}
                 />
               </Grid>
               <Grid
@@ -161,7 +161,7 @@ export default function SignIn() {
                     label="Password"
                   />
                   <FormHelperText error>
-                    {inputErrors.passwordError || " "}
+                    {inputErrors.passwordError}
                   </FormHelperText>
                 </FormControl>
               </Grid>

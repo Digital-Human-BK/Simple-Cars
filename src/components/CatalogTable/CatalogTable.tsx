@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,6 +16,7 @@ import TablePaginationActions from "./TablePaginationActions/TablePaginationActi
 import { useAppSelector } from "../../store/store";
 import { selectAllCars } from "../../store/catalog-slice";
 import CatalogTableNotification from "./CatalogTableNotification/CatalogTableNotification";
+import { selectUser } from "../../store/auth-slice";
 
 type CatalogTableProps = {
   isAddingCar: boolean;
@@ -26,7 +27,18 @@ export default function CatalogTable({
   isAddingCar,
   toggleMenu,
 }: CatalogTableProps) {
+  const user = useAppSelector(selectUser);
   const carData = useAppSelector(selectAllCars);
+
+  const userIsOwner = useMemo(()=> {
+    if(user){
+      return carData.some(car=> car.user.id === user.id)
+    } else {
+      return false;
+    }
+  }, [user, carData]);
+
+  const showActionsColumn = userIsOwner || isAddingCar;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -56,7 +68,7 @@ export default function CatalogTable({
         sx={{ minWidth: 500 }}
         aria-label="custom pagination table"
       >
-        <CatalogTableHead />
+        <CatalogTableHead showActionsColumn={showActionsColumn}/>
         <TableBody>
           {isAddingCar && (
             <AddCar
@@ -73,6 +85,7 @@ export default function CatalogTable({
             <CatalogTableRow
               key={car.id}
               car={car}
+              showActionsColumn={showActionsColumn}
             />
           ))}
           {emptyRows > 0 && (

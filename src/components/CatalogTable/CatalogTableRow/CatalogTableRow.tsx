@@ -17,9 +17,10 @@ import AlertDialog from "../../common/AlertDialog/AlertDialog";
 
 type CatalogTableRowProps = {
   car: Car;
+  showActionsColumn: boolean;
 };
 
-function CatalogTableRow({ car }: CatalogTableRowProps) {
+function CatalogTableRow({ car, showActionsColumn }: CatalogTableRowProps) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
@@ -61,7 +62,9 @@ function CatalogTableRow({ car }: CatalogTableRowProps) {
         onClose={() => setIsDeleting(false)}
         onConfirm={() => dispatch(deleteCar({ carId: car.id }))}
       />
-      <TableCell style={{ width: 160 }}>{isOwner && ownerControls}</TableCell>
+      {showActionsColumn && (
+        <TableCell align="center" style={{ width: 160 }}>{isOwner && ownerControls}</TableCell>
+      )}
       <TableCell style={{ width: 160 }}>{car.make}</TableCell>
       <TableCell style={{ width: 160 }}>{car.model}</TableCell>
       <TableCell style={{ width: 160 }}>{car.year}</TableCell>

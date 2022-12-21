@@ -3,14 +3,85 @@ import { Car, NewCar } from "../interfaces/Car";
 import { BASE_URL, catalogEndpoints } from "../constants/apiEndpoints";
 import { RootState } from "./store";
 
+const mockData: Car[] = [
+  {
+    id: "1",
+    make: "Honda",
+    model: "Accord",
+    year: 2004,
+    engineType: "DIESEL",
+    gearBox: "AUTOMATIC",
+    condition: "NEW",
+    horsePower: 144,
+    color: "gunmetal",
+    price: 6000,
+    city: "Pleven",
+    mileage: 320000,
+    user: {
+      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f11",
+      username: "MikeLP",
+      password: null,
+      firstName: "Mike",
+      lastName: "Shinoda",
+    },
+    extras: "economic",
+  },
+  {
+    id: "2",
+    make: "Toyota",
+    model: "Prius",
+    year: 2011,
+    engineType: "HYBRID",
+    gearBox: "AUTOMATIC",
+    condition: "USED",
+    horsePower: 112,
+    color: "white",
+    price: 16000,
+    city: "Sofia",
+    mileage: 530000,
+    user: {
+      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f11",
+      username: "MikeLP",
+      password: null,
+      firstName: "Mike",
+      lastName: "Shinoda",
+    },
+    extras: "economic",
+  },
+  {
+    id: "3",
+    make: "Mercedes",
+    model: "S-class",
+    year: 2019,
+    engineType: "Petrol",
+    gearBox: "AUTOMATIC",
+    condition: "NEW",
+    horsePower: 450,
+    color: "black",
+    price: 160000,
+    city: "Burgas",
+    mileage: 10000,
+    user: {
+      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f11",
+      username: "MikeLP",
+      password: null,
+      firstName: "Mike",
+      lastName: "Shinoda",
+    },
+    extras: "power",
+  },
+];
+
 interface CatalogState {
   cars: Car[];
+  filteredCars: Car[]
   loading: boolean;
   error: null | string | undefined;
 }
 
 const initialState: CatalogState = {
-  cars: [],
+  cars: mockData,
+  filteredCars: mockData,
   loading: false,
   error: null,
 };
@@ -60,8 +131,8 @@ export const createCar = createAsyncThunk<Car, NewCar | Car>(
         body: JSON.stringify(carData),
       });
 
-      if(res.ok === false) {
-        throw new Error("Something went wrong!")
+      if (res.ok === false) {
+        throw new Error("Something went wrong!");
       }
 
       return res.json();
@@ -101,8 +172,8 @@ export const updateCar = createAsyncThunk<Car, NewCar | Car>(
         body: JSON.stringify(updatedCarData),
       });
 
-      if(res.ok === false) {
-        throw new Error("Something went wrong!")
+      if (res.ok === false) {
+        throw new Error("Something went wrong!");
       }
 
       return res.json();
@@ -159,10 +230,29 @@ const catalogSlice = createSlice({
   initialState,
   reducers: {
     searchCars(state, action) {
-      state.cars = state.cars.filter((item) => {
-        return Object.values(item).some((v) =>
-          v.toString().toLowerCase().includes(action.payload)
-        );
+      if (action.payload === "") {
+        state.filteredCars = [...state.cars];
+      } else {
+        state.filteredCars = state.cars.filter((item) => {
+          return Object.values(item).some((v) =>
+            v.toString().toLowerCase().includes(action.payload)
+          );
+        });
+      }
+    },
+    sortCars(state, action) {
+      state.filteredCars.sort((a, b) => {
+        let key: string = action.payload.key;
+        let order: string = action.payload.order;
+        let valueA = a[key as keyof Car];
+        let valueB = b[key as keyof Car];
+        if (order === "asc") {
+          return valueA < valueB ? -1 : 1;
+        }
+        if (order === "desc") {
+          return valueA > valueB ? -1 : 1;
+        }
+        return 0;
       });
     },
   },
@@ -227,8 +317,8 @@ const catalogSlice = createSlice({
   },
 });
 
-export const { searchCars } = catalogSlice.actions;
-export const selectAllCars = (state: RootState) => state.catalog.cars;
+export const { searchCars, sortCars } = catalogSlice.actions;
+export const selectAllCars = (state: RootState) => state.catalog.filteredCars;
 export const selectCatalogLoading = (state: RootState) => state.catalog.loading;
 export const selectCatalogError = (state: RootState) => state.catalog.error;
 

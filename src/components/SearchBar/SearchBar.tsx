@@ -11,37 +11,37 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import InputAdornment from "@mui/material/InputAdornment";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 
-import { useAppSelector } from "../../store/store";
+import { useAppSelector, useAppDispatch } from "../../store/store";
 import { searchBarStyles } from "./styles";
 import { selectUser } from "../../store/auth-slice";
+import { searchCars } from "../../store/catalog-slice";
 
 type SearchBarProps = {
-  onSearch: (searchCriteria: string) => void;
   isAddingCar: boolean;
   toggleAddCar: () => void;
 };
 
-let initialLoad = false;
+let initialComponentLoad = true;
 
-function SearchBar({ onSearch, isAddingCar, toggleAddCar }: SearchBarProps) {
+function SearchBar({ isAddingCar, toggleAddCar }: SearchBarProps) {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    if(initialLoad === false) {
-      initialLoad = true;
+    console.log('search render');    
+
+    if(initialComponentLoad){
+      initialComponentLoad = false;
       return;
     }
-    console.log('search render');
-    
-
     const debounce = setTimeout(() => {
-        onSearch(search);
-    }, 1000);
+        dispatch(searchCars(search));
+    }, 500);
     
     return () => clearTimeout(debounce);
-  }, [search, onSearch]);
+  }, [search, dispatch]);
 
   return (
     <Grid

@@ -95,7 +95,7 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
         error={inputsError}
         loading={false}
       />
-      <TableCell style={{ width: 160 }}>
+      <TableCell align="center" style={{ width: 160 }}>
         <Box>
           <Tooltip title="Ok">
             <DoneIcon

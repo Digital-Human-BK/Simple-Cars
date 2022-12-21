@@ -14,6 +14,7 @@ export interface TableColumns {
     | "mileage"
     | "extras";
   label: string;
+  sortBy: string;
   minWidth?: number;
   align?: "right" | "center";
 }

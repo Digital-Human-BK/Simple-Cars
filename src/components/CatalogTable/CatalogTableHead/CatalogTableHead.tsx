@@ -2,8 +2,10 @@ import Box from "@mui/material/Box";
 import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { TableColumns } from "../../../interfaces/TableColumns";
+
 import SortingButtons from "../../common/SortingButtons/SortingButtons";
+
+import { TableColumns } from "../../../interfaces/TableColumns";
 
 const columns: readonly TableColumns[] = [
   { id: "make", label: "Make", sortBy: "make", minWidth: 90 },

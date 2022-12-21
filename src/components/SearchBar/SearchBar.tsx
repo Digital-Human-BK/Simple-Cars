@@ -11,10 +11,10 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import InputAdornment from "@mui/material/InputAdornment";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 
-import { useAppSelector, useAppDispatch } from "../../store/store";
 import { searchBarStyles } from "./styles";
 import { selectUser } from "../../store/auth-slice";
 import { searchCars } from "../../store/catalog-slice";
+import { useAppSelector, useAppDispatch } from "../../store/store";
 
 type SearchBarProps = {
   isAddingCar: boolean;
@@ -30,12 +30,11 @@ function SearchBar({ isAddingCar, toggleAddCar }: SearchBarProps) {
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    console.log('search render');    
-
+    
     if(initialComponentLoad){
       initialComponentLoad = false;
       return;
-    }
+    }    
     const debounce = setTimeout(() => {
         dispatch(searchCars(search));
     }, 500);

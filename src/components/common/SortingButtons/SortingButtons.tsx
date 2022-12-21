@@ -20,7 +20,7 @@ function SortingButtons({ sortBy }: SortingButtonsProps) {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", ml: "3px" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", ml: "5px" }}>
       <Box
         component="span"
         sx={{
@@ -53,7 +53,7 @@ function SortingButtons({ sortBy }: SortingButtonsProps) {
         <ArrowDropDownOutlinedIcon
           sx={{ cursor: "pointer" }}
           fontSize="medium"
-          color="secondary"
+          color="primary"
           onClick={handleDescendingSort}
         />
       </Box>

@@ -12,11 +12,12 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import Toast from "../../common/Toast/Toast";
+
 import { Car, NewCar } from "../../../interfaces/Car";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
-import { selectUser } from "../../../store/auth-slice";
 import { validateAddCar } from "../../../helpers/validateAddCar";
+import { selectUser } from "../../../store/auth-slice";
 import { createCar, updateCar } from "../../../store/catalog-slice";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 
 type ChangeEvent =
   | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,13 +68,11 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
     setInputsTouched(true);
     setNewCar((prevState) => ({
       ...prevState,
-      [ev.target.name]: ev.target.value,
+      [ev.target.name]: ev.target.value.trim(),
     }));
   };
 
   const handleAddCar = () => {
-    console.log(newCarData);
-
     const formIsValid = validateAddCar(newCarData);
 
     if (formIsValid === false) {

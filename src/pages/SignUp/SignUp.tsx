@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
@@ -17,19 +17,21 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import FormHelperText from "@mui/material/FormHelperText";
 
 import { signUpStyles } from "./styles";
+import Toast from "../../components/common/Toast/Toast";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
 import {
   register,
   login,
+  selectUser,
   selectAuthError,
   selectAuthLoading,
 } from "../../store/auth-slice";
+import { appRoutes } from "../../constants/appRoutes";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { NewUser, InputsTouched } from "../../interfaces/User";
+import { RegisterUser, InputsTouched } from "../../interfaces/User";
 import { validateRegister } from "../../helpers/validateRegister";
-import Toast from "../../components/common/Toast/Toast";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -37,6 +39,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const user = useAppSelector(selectUser);
   const loading = useAppSelector(selectAuthLoading);
   const error = useAppSelector(selectAuthError);
 
@@ -47,7 +50,7 @@ export default function SignUp() {
     username: false,
     password: false,
   });
-  const [userCredentials, setUserCredentials] = useState<NewUser>({
+  const [userCredentials, setUserCredentials] = useState<RegisterUser>({
     firstName: "",
     lastName: "",
     username: "",
@@ -88,8 +91,13 @@ export default function SignUp() {
         password: userCredentials.password,
       })
     ).unwrap();
-    navigate("/catalog");
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate(appRoutes.catalog, { replace: true });
+    }
+  }, [user, navigate]);
 
   return (
     <Box
@@ -221,7 +229,7 @@ export default function SignUp() {
               justifyContent="center"
             >
               <Grid item>
-                <LinkComponent path="/">
+                <LinkComponent path={appRoutes.index}>
                   Already have an account? Sign in
                 </LinkComponent>
               </Grid>

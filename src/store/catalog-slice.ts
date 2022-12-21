@@ -1,76 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+import { RootState } from "./store";
 import { Car, NewCar } from "../interfaces/Car";
 import { BASE_URL, catalogEndpoints } from "../constants/apiEndpoints";
-import { RootState } from "./store";
-
-const mockData: Car[] = [
-  {
-    id: "1",
-    make: "Honda",
-    model: "Accord",
-    year: 2004,
-    engineType: "DIESEL",
-    gearBox: "AUTOMATIC",
-    condition: "NEW",
-    horsePower: 144,
-    color: "gunmetal",
-    price: 6000,
-    city: "Pleven",
-    mileage: 320000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f11",
-      username: "MikeLP",
-      password: null,
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "economic",
-  },
-  {
-    id: "2",
-    make: "Toyota",
-    model: "Prius",
-    year: 2011,
-    engineType: "HYBRID",
-    gearBox: "AUTOMATIC",
-    condition: "USED",
-    horsePower: 112,
-    color: "white",
-    price: 16000,
-    city: "Sofia",
-    mileage: 530000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f11",
-      username: "MikeLP",
-      password: null,
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "economic",
-  },
-  {
-    id: "3",
-    make: "Mercedes",
-    model: "S-class",
-    year: 2019,
-    engineType: "Petrol",
-    gearBox: "AUTOMATIC",
-    condition: "NEW",
-    horsePower: 450,
-    color: "black",
-    price: 160000,
-    city: "Burgas",
-    mileage: 10000,
-    user: {
-      id: "c8c17b7a-b922-4c16-b0a2-a06f3afda2f11",
-      username: "MikeLP",
-      password: null,
-      firstName: "Mike",
-      lastName: "Shinoda",
-    },
-    extras: "power",
-  },
-];
 
 interface CatalogState {
   cars: Car[];
@@ -80,8 +12,8 @@ interface CatalogState {
 }
 
 const initialState: CatalogState = {
-  cars: mockData,
-  filteredCars: mockData,
+  cars: [],
+  filteredCars: [],
   loading: false,
   error: null,
 };
@@ -265,6 +197,7 @@ const catalogSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.cars = action.payload;
+      state.filteredCars = [...state.cars];
     });
     builder.addCase(fetchAllCars.rejected, (state, action) => {
       state.loading = false;
@@ -279,6 +212,7 @@ const catalogSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.cars.unshift(action.payload);
+      state.filteredCars = [...state.cars];
     });
     builder.addCase(createCar.rejected, (state, action) => {
       state.loading = false;
@@ -293,6 +227,7 @@ const catalogSlice = createSlice({
       state.cars = state.cars.map((car) =>
         car.id !== action.payload.id ? car : action.payload
       );
+      state.filteredCars = [...state.cars];
       state.error = null;
       state.loading = false;
     });
@@ -307,6 +242,7 @@ const catalogSlice = createSlice({
     });
     builder.addCase(deleteCar.fulfilled, (state, action) => {
       state.cars = state.cars.filter((car) => car.id !== action.payload);
+      state.filteredCars = [...state.cars];
       state.error = null;
       state.loading = false;
     });

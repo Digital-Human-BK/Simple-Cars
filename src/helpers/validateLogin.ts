@@ -18,17 +18,17 @@ export function validateLogin(
   };
 
   //validate username
-  if (username.trim() === "" && inputsTouched.username) {
+  if (username === "" && inputsTouched.username) {
     inputErrors.usernameError = "Username is required";
-  } else if (username.trim().length < 3 && inputsTouched.username) {
+  } else if (username.length < 3 && inputsTouched.username) {
     inputErrors.usernameError = "At least 3 characters";
   } else {
     inputErrors.usernameError = null;
   }
   //validate password
-  if (password.trim() === "" && inputsTouched.password) {
+  if (password === "" && inputsTouched.password) {
     inputErrors.passwordError = "Password is required";
-  } else if (password.trim().length < 5 && inputsTouched.password) {
+  } else if (password.length < 5 && inputsTouched.password) {
     inputErrors.passwordError = "At least 5 characters";
   } else {
     inputErrors.passwordError = null;

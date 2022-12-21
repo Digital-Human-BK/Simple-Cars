@@ -9,13 +9,6 @@ export interface User {
   jwtToken: string;
 }
 
-export interface NewUser {
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-}
-
 export interface LoginUser {
   username: string;
   password: string;

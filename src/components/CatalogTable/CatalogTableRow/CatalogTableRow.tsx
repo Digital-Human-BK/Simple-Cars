@@ -7,13 +7,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
+import AddCar from "../AddCar/AddCar";
+import AlertDialog from "../../common/AlertDialog/AlertDialog";
+
 import { Car } from "../../../interfaces/Car";
 import { selectUser } from "../../../store/auth-slice";
 import { deleteCar } from "../../../store/catalog-slice";
 import { useAppSelector, useAppDispatch } from "../../../store/store";
-
-import AddCar from "../AddCar/AddCar";
-import AlertDialog from "../../common/AlertDialog/AlertDialog";
 
 type CatalogTableRowProps = {
   car: Car;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { signInStyles } from "./styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -17,7 +16,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import FormHelperText from "@mui/material/FormHelperText";
 
+import { signInStyles } from "./styles";
 import logo from "../../assets/logo.png";
+import Toast from "../../components/common/Toast/Toast";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
@@ -30,7 +31,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { LoginUser, InputsTouched } from "../../interfaces/User";
 import { validateLogin } from "../../helpers/validateLogin";
-import Toast from "../../components/common/Toast/Toast";
+import { appRoutes } from "../../constants/appRoutes";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -72,7 +73,7 @@ export default function SignIn() {
     }));
     setUserCredentials((prevState) => ({
       ...prevState,
-      [ev.target.name]: ev.target.value,
+      [ev.target.name]: ev.target.value.trim(),
     }));
   };
 
@@ -82,11 +83,11 @@ export default function SignIn() {
     await dispatch(login(userCredentials)).unwrap();
   };
 
-  useEffect(()=> {
-    if(user){
-      navigate('/catalog', {replace: true})
+  useEffect(() => {
+    if (user) {
+      navigate(appRoutes.catalog, { replace: true });
     }
-  }, [user, navigate])
+  }, [user, navigate]);
 
   return (
     <Box
@@ -194,7 +195,7 @@ export default function SignIn() {
                 item
                 xs={12}
               >
-                <LinkComponent path="/sign-up">
+                <LinkComponent path={appRoutes.signUp}>
                   Don't have an account? Sign Up
                 </LinkComponent>
               </Grid>
@@ -202,7 +203,7 @@ export default function SignIn() {
                 item
                 xs={12}
               >
-                <LinkComponent path="/catalog">
+                <LinkComponent path={appRoutes.signUp}>
                   Continue to Catalog
                 </LinkComponent>
               </Grid>

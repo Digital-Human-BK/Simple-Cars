@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { LoginUser, NewUser, User } from "../interfaces/User";
-import { BASE_URL, authEndpoints } from "../constants/apiEndpoints";
+
 import { RootState } from "./store";
+import { LoginUser, RegisterUser, User } from "../interfaces/User";
+import { BASE_URL, authEndpoints } from "../constants/apiEndpoints";
 
 interface UserState {
   userData: User | null;
@@ -50,7 +51,7 @@ export const login = createAsyncThunk<User, LoginUser>(
   }
 );
 
-export const register = createAsyncThunk<string, NewUser>(
+export const register = createAsyncThunk<string, RegisterUser>(
   "auth/register",
   async (registerData) => {
     try {

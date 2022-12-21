@@ -9,6 +9,7 @@ import "./index.css";
 import App from "./App";
 import store from "./store/store";
 
+// could be used to preload cars data
 // import { fetchAllCars } from "./store/catalog-slice";
 // store.dispatch(fetchAllCars());
 

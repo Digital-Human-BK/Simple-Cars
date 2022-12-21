@@ -6,13 +6,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 
 import logo from "../../assets/logo.png";
-import { useAppSelector, useAppDispatch } from "../../store/store";
 import { logout, selectUser } from "../../store/auth-slice";
+import { useAppSelector, useAppDispatch } from "../../store/store";
+import { appRoutes } from "../../constants/appRoutes";
 
 export default function NavBar() {
   const navigate = useNavigate();
-  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -28,7 +29,7 @@ export default function NavBar() {
             <Button
               color="inherit"
               sx={{ mr: 8 }}
-              onClick={() => navigate("/")}
+              onClick={() => navigate(appRoutes.index)}
             >
               Login
             </Button>

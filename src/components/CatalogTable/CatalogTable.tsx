@@ -13,9 +13,10 @@ import AddCar from "./AddCar/AddCar";
 import CatalogTableHead from "./CatalogTableHead/CatalogTableHead";
 import CatalogTableRow from "./CatalogTableRow/CatalogTableRow";
 import TablePaginationActions from "./TablePaginationActions/TablePaginationActions";
+import CatalogTableNotification from "./CatalogTableNotification/CatalogTableNotification";
+
 import { useAppSelector } from "../../store/store";
 import { selectAllCars } from "../../store/catalog-slice";
-import CatalogTableNotification from "./CatalogTableNotification/CatalogTableNotification";
 import { selectUser } from "../../store/auth-slice";
 
 type CatalogTableProps = {

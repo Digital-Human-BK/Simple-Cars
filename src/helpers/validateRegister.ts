@@ -22,35 +22,35 @@ export function validateRegister(
   };
 
   //validate firstName
-  if (firstName.trim() === "" && inputsTouched.firstName) {
+  if (firstName === "" && inputsTouched.firstName) {
     inputErrors.firstNameError = "First name is required";
-  } else if (firstName.trim().length < 2 && inputsTouched.firstName) {
+  } else if (firstName.length < 2 && inputsTouched.firstName) {
     inputErrors.firstNameError = "At least 2 characters";
   } else {
     inputErrors.firstNameError = null;
   }
 
   //validate lastName
-  if (lastName.trim() === "" && inputsTouched.lastName) {
+  if (lastName === "" && inputsTouched.lastName) {
     inputErrors.lastNameError = "Last name is required";
-  } else if (lastName.trim().length < 2 && inputsTouched.lastName) {
+  } else if (lastName.length < 2 && inputsTouched.lastName) {
     inputErrors.lastNameError = "At least 2 characters";
   } else {
     inputErrors.lastNameError = null;
   }
   
   //validate username
-  if (username.trim() === "" && inputsTouched.username) {
+  if (username === "" && inputsTouched.username) {
     inputErrors.usernameError = "Username is required";
-  } else if (username.trim().length < 3 && inputsTouched.username) {
+  } else if (username.length < 3 && inputsTouched.username) {
     inputErrors.usernameError = "At least 3 characters";
   } else {
     inputErrors.usernameError = null;
   }
   //validate password
-  if (password.trim() === "" && inputsTouched.password) {
+  if (password === "" && inputsTouched.password) {
     inputErrors.passwordError = "Password is required";
-  } else if (password.trim().length < 5 && inputsTouched.password) {
+  } else if (password.length < 5 && inputsTouched.password) {
     inputErrors.passwordError = "At least 5 characters";
   } else {
     inputErrors.passwordError = null;

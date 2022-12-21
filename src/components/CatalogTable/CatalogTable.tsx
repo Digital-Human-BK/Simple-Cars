@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -31,9 +31,9 @@ export default function CatalogTable({
   const user = useAppSelector(selectUser);
   const carData = useAppSelector(selectAllCars);
 
-  const userIsOwner = useMemo(()=> {
-    if(user){
-      return carData.some(car=> car.user.id === user.id)
+  const userIsOwner = useMemo(() => {
+    if (user) {
+      return carData.some((car) => car.user.id === user.id);
     } else {
       return false;
     }
@@ -62,6 +62,12 @@ export default function CatalogTable({
     setPage(0);
   };
 
+  useEffect(() => {
+    if (emptyRows === rowsPerPage && page > 0) {
+      setPage(page - 1);
+    }
+  }, [emptyRows, page, rowsPerPage]);
+
   return (
     <TableContainer component={Paper}>
       <Table
@@ -69,13 +75,9 @@ export default function CatalogTable({
         sx={{ minWidth: 500 }}
         aria-label="custom pagination table"
       >
-        <CatalogTableHead showActionsColumn={showActionsColumn}/>
+        <CatalogTableHead showActionsColumn={showActionsColumn} />
         <TableBody>
-          {isAddingCar && (
-            <AddCar
-              toggleMenu={toggleMenu}
-            />
-          )}
+          {isAddingCar && <AddCar toggleMenu={toggleMenu} />}
           {(rowsPerPage > 0
             ? carData.slice(
                 page * rowsPerPage,

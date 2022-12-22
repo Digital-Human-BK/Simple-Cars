@@ -203,7 +203,7 @@ export default function SignIn() {
                 item
                 xs={12}
               >
-                <LinkComponent path={appRoutes.signUp}>
+                <LinkComponent path={appRoutes.catalog}>
                   Continue to Catalog
                 </LinkComponent>
               </Grid>

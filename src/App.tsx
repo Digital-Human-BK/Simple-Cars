@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Catalog from "./pages/Catalog/Catalog";
+import NotFound from "./pages/NotFound/NotFound";
 
 import { theme } from "./utils/muiTheme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -23,6 +24,10 @@ function App() {
         <Route
           path={appRoutes.catalog}
           element={<Catalog />}
+        />
+        <Route
+          path="*"
+          element={<NotFound />}
         />
       </Routes>
     </ThemeProvider>

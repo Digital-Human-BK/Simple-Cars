@@ -18,17 +18,21 @@
 
 ## Assignment description
 
-Practice project used to learn Typescript, React Redux, Redux Toolkit, Material UI
+Practice project used to learn Typescript, ReactJS, Redux, Redux Toolkit, Redux Persist, Material UI
 
 <!-- BUILD -->
 
 ### Built With
 
 The app is built using ReactJS 18 
-[![Typescript][typescript][typescript-url]] 
-[![React][react][react-url]]
-[![Redux Toolkit][redux][redux-url]]
-[![Material UI][mui][mui-url]]
+
+[![Typescript][typescript]][typescript-url] 
+
+[![React][react]][react-url]
+
+[![Redux Toolkit][redux]][redux-url]
+
+[![Material UI][mui]][mui-url]
 
 <!-- GETTING STARTED -->
 

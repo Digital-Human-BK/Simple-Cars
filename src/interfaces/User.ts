@@ -21,13 +21,6 @@ export interface RegisterUser {
   password: string;
 }
 
-export interface AuthUser {
-  firstName?: string | undefined;
-  lastName?: string | undefined;
-  username: string;
-  password: string;
-}
-
 export interface InputsTouched {
   [key: string]: boolean;
 }

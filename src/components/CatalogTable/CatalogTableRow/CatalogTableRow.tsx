@@ -56,12 +56,14 @@ function CatalogTableRow({ car, showActionsColumn }: CatalogTableRowProps) {
   }
   return (
     <TableRow key={car.id}>
+      
       <AlertDialog
         open={isDeleting}
         message={"You are about to delete this car from the catalog!"}
         onClose={() => setIsDeleting(false)}
         onConfirm={() => dispatch(deleteCar({ carId: car.id }))}
       />
+
       {showActionsColumn && (
         <TableCell align="center" style={{ width: 160 }}>{isOwner && ownerControls}</TableCell>
       )}

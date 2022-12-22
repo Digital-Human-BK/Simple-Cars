@@ -91,10 +91,12 @@ const authSlice = createSlice({
     },
     resetError(state) {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
-    //login
+    // ========================
+    // LOGIN
+    // ========================
     builder.addCase(login.pending, (state) => {
       state.loading = true;
     });
@@ -108,7 +110,9 @@ const authSlice = createSlice({
       state.error = action.error.message;
     });
 
-    //register
+    // ========================
+    // REGISTER
+    // ========================
     builder.addCase(register.pending, (state) => {
       state.loading = true;
     });

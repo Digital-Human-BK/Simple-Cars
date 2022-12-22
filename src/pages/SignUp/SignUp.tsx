@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -21,89 +18,31 @@ import Toast from "../../components/common/Toast/Toast";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
-import {
-  register,
-  login,
-  selectUser,
-  selectAuthError,
-  selectAuthLoading,
-} from "../../store/auth-slice";
+import useRegister from "../../hooks/useRegister";
 import { appRoutes } from "../../constants/appRoutes";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { RegisterUser, InputsTouched } from "../../interfaces/User";
-import { validateRegister } from "../../helpers/validateRegister";
-
-type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function SignUp() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
-  const user = useAppSelector(selectUser);
-  const loading = useAppSelector(selectAuthLoading);
-  const error = useAppSelector(selectAuthError);
-
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [inputsTouched, setInputsTouched] = useState<InputsTouched>({
-    firstName: false,
-    lastName: false,
-    username: false,
-    password: false,
-  });
-  const [userCredentials, setUserCredentials] = useState<RegisterUser>({
-    firstName: "",
-    lastName: "",
-    username: "",
-    password: "",
-  });
-
-  const inputErrors = validateRegister(userCredentials, inputsTouched);
-
-  const handleToggleShowPassword = () => {
-    setShowPassword((prevState) => !prevState);
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleChange = (ev: ChangeEvent) => {
-    setInputsTouched((prevState) => ({
-      ...prevState,
-      [ev.target.name]: true,
-    }));
-
-    setUserCredentials((prevState) => ({
-      ...prevState,
-      [ev.target.name]: ev.target.value,
-    }));
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    await dispatch(register(userCredentials)).unwrap();
-    await dispatch(
-      login({
-        username: userCredentials.username,
-        password: userCredentials.password,
-      })
-    ).unwrap();
-  };
-
-  useEffect(() => {
-    if (user) {
-      navigate(appRoutes.catalog, { replace: true });
-    }
-  }, [user, navigate]);
+  const {
+    error,
+    loading,
+    showPassword,
+    handleToggleShowPassword,
+    handleMouseDownPassword,
+    userCredentials,
+    inputErrors,
+    handleChange,
+    handleRegisterSubmit,
+  } = useRegister();
 
   return (
     <Box
       component="main"
       sx={signUpStyles.main}
     >
+      <Toast
+        error={error}
+        loading={loading}
+      />
       <Container
         component="section"
         maxWidth="xs"
@@ -120,7 +59,7 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleRegisterSubmit}
             sx={signUpStyles.form}
           >
             <Grid
@@ -238,10 +177,6 @@ export default function SignUp() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-      <Toast
-        error={error}
-        loading={loading}
-      />
     </Box>
   );
 }

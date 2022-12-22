@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-  login,
-  register,
   selectAuthError,
   selectAuthLoading,
   selectUser,
-} from "../../store/auth-slice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { LoginUser, InputsTouched, RegisterUser, AuthUser } from "../../interfaces/User";
-import { validateLogin } from "../../helpers/validateLogin";
+} from "../store/auth-slice";
+import { login } from "../store/auth-slice";
+import { appRoutes } from "../constants/appRoutes";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { LoginUser, InputsTouched } from "../interfaces/User";
+import { validateLogin } from "../utils/validateLogin";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
-function useAuthForm() {
+function useLogin() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const user = useAppSelector(selectUser);
+  const loading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -24,11 +28,9 @@ function useAuthForm() {
     username: false,
     password: false,
   });
-  const [userCredentials, setUserCredentials] = useState<AuthUser>({
+  const [userCredentials, setUserCredentials] = useState<LoginUser>({
     username: "",
     password: "",
-    firstName: "",
-    lastName: ""
   });
 
   const inputErrors = validateLogin(userCredentials, inputsTouched);
@@ -60,19 +62,16 @@ function useAuthForm() {
     await dispatch(login(userCredentials)).unwrap();
   };
 
-  const handleRegisterSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // await dispatch(register(userCredentials)).unwrap();
-    await dispatch(
-      login({
-        username: userCredentials.username,
-        password: userCredentials.password,
-      })
-    ).unwrap();
-  };
+  useEffect(() => {
+    if (user) {
+      navigate(appRoutes.catalog, { replace: true });
+    }
+  }, [user, navigate]);
 
   return {
+    user,
+    error,
+    loading,
     showPassword,
     handleToggleShowPassword,
     handleMouseDownPassword,
@@ -81,8 +80,7 @@ function useAuthForm() {
     inputErrors,
     handleChange,
     handleLoginSubmit,
-    handleRegisterSubmit,
   };
 }
 
-export default useAuthForm;
+export default useLogin;

@@ -6,7 +6,7 @@ import { BASE_URL, catalogEndpoints } from "../constants/apiEndpoints";
 
 interface CatalogState {
   cars: Car[];
-  filteredCars: Car[]
+  filteredCars: Car[];
   loading: boolean;
   error: null | string | undefined;
 }
@@ -62,6 +62,10 @@ export const createCar = createAsyncThunk<Car, NewCar | Car>(
         },
         body: JSON.stringify(carData),
       });
+
+      if(res.status === 400){
+        throw new Error("Invalid car data");
+      }
 
       if (res.ok === false) {
         throw new Error("Something went wrong!");
@@ -161,6 +165,9 @@ const catalogSlice = createSlice({
   name: "catalog",
   initialState,
   reducers: {
+    // ========================
+    // SEARCH CARS
+    // ========================
     searchCars(state, action) {
       if (action.payload === "") {
         state.filteredCars = [...state.cars];
@@ -172,6 +179,9 @@ const catalogSlice = createSlice({
         });
       }
     },
+    // ========================
+    // SORT CARS
+    // ========================
     sortCars(state, action) {
       state.filteredCars.sort((a, b) => {
         let key: string = action.payload.key;
@@ -189,7 +199,9 @@ const catalogSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    //fetch all cars
+    // ========================
+    // FETCH ALL CARS
+    // ========================
     builder.addCase(fetchAllCars.pending, (state) => {
       state.loading = true;
     });
@@ -204,7 +216,9 @@ const catalogSlice = createSlice({
       state.error = action.error.message;
     });
 
-    // create new car
+    // ========================
+    // CREATE NEW CAR
+    // ========================
     builder.addCase(createCar.pending, (state) => {
       state.loading = true;
     });
@@ -219,7 +233,9 @@ const catalogSlice = createSlice({
       state.error = action.error.message;
     });
 
-    // update car
+    // ========================
+    // UPDATE EXISTING CAR
+    // ========================
     builder.addCase(updateCar.pending, (state) => {
       state.loading = true;
     });
@@ -236,7 +252,9 @@ const catalogSlice = createSlice({
       state.error = action.error.message;
     });
 
-    //delete car
+    // ========================
+    // DELETE CAR
+    // ========================
     builder.addCase(deleteCar.pending, (state) => {
       state.loading = true;
     });

@@ -14,7 +14,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Toast from "../../common/Toast/Toast";
 
 import { Car, NewCar } from "../../../interfaces/Car";
-import { validateAddCar } from "../../../helpers/validateAddCar";
+import { validateAddCar } from "../../../utils/validateAddCar";
 import { selectUser } from "../../../store/auth-slice";
 import { createCar, updateCar } from "../../../store/catalog-slice";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
@@ -138,6 +138,7 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
           placeholder="Year"
           type="number"
           name="year"
+          inputProps={{min: 1}}
           value={newCarData.year}
           onChange={(ev) => handleChange(ev)}
           error={inputsTouched && !newCarData.year}
@@ -198,6 +199,7 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
           variant="standard"
           placeholder="Power"
           type="number"
+          inputProps={{min: 1}}
           name="horsePower"
           value={newCarData.horsePower}
           onChange={(ev) => handleChange(ev)}
@@ -219,6 +221,7 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
           variant="standard"
           placeholder="Price $"
           type="number"
+          inputProps={{min: 1}}
           name="price"
           value={newCarData.price}
           onChange={(ev) => handleChange(ev)}
@@ -240,6 +243,7 @@ function AddCar({ toggleMenu, data }: AddCarProps) {
           variant="standard"
           placeholder="Mileage"
           type="number"
+          inputProps={{min: 1}}
           name="mileage"
           value={newCarData.mileage}
           onChange={(ev) => handleChange(ev)}

@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -22,78 +19,31 @@ import Toast from "../../components/common/Toast/Toast";
 import Copyright from "../../components/common/Copyright/Copyright";
 import LinkComponent from "../../components/common/LinkComponent/LinkComponent";
 
-import {
-  login,
-  selectAuthError,
-  selectAuthLoading,
-  selectUser,
-} from "../../store/auth-slice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { LoginUser, InputsTouched } from "../../interfaces/User";
-import { validateLogin } from "../../helpers/validateLogin";
+import useLogin from "../../hooks/useLogin";
 import { appRoutes } from "../../constants/appRoutes";
 
-type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
-
 export default function SignIn() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const user = useAppSelector(selectUser);
-  const loading = useAppSelector(selectAuthLoading);
-  const error = useAppSelector(selectAuthError);
-
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const [inputsTouched, setInputsTouched] = useState<InputsTouched>({
-    username: false,
-    password: false,
-  });
-  const [userCredentials, setUserCredentials] = useState<LoginUser>({
-    username: "",
-    password: "",
-  });
-
-  const inputErrors = validateLogin(userCredentials, inputsTouched);
-
-  const handleToggleShowPassword = () => {
-    setShowPassword((prevState) => !prevState);
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleChange = (ev: ChangeEvent) => {
-    setInputsTouched((prevState) => ({
-      ...prevState,
-      [ev.target.name]: true,
-    }));
-    setUserCredentials((prevState) => ({
-      ...prevState,
-      [ev.target.name]: ev.target.value.trim(),
-    }));
-  };
-
-  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-
-    await dispatch(login(userCredentials)).unwrap();
-  };
-
-  useEffect(() => {
-    if (user) {
-      navigate(appRoutes.catalog, { replace: true });
-    }
-  }, [user, navigate]);
+  const {
+    error,
+    loading,
+    showPassword,
+    handleToggleShowPassword,
+    handleMouseDownPassword,
+    userCredentials,
+    inputErrors,
+    handleChange,
+    handleLoginSubmit,
+  } = useLogin();
 
   return (
     <Box
       component="main"
       sx={signInStyles.main}
     >
+      <Toast
+        error={error}
+        loading={loading}
+      />
       <Container
         component="section"
         maxWidth="xs"
@@ -110,7 +60,7 @@ export default function SignIn() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleLoginSubmit}
             sx={{ mt: 3 }}
           >
             <Grid
@@ -218,10 +168,6 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 0 }} />
       </Container>
-      <Toast
-        error={error}
-        loading={loading}
-      />
     </Box>
   );
 }

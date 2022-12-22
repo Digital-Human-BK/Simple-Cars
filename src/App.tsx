@@ -4,7 +4,7 @@ import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Catalog from "./pages/Catalog/Catalog";
 
-import { theme } from "./helpers/muiTheme";
+import { theme } from "./utils/muiTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import { appRoutes } from "./constants/appRoutes";
 

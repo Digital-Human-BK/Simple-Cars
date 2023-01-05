@@ -6,7 +6,8 @@ interface authEndpointsObject {
 }
 
 interface catalogEndpointsObject {
-  [key: string]: string
+  cars: string;
+  allCars: string;
 }
 
 export const authEndpoints: authEndpointsObject = {

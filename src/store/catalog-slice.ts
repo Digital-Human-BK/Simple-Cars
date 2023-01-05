@@ -169,12 +169,13 @@ const catalogSlice = createSlice({
     // SEARCH CARS
     // ========================
     searchCars(state, action) {
-      if (action.payload === "") {
+      const lowerCase = action.payload.toLocaleLowerCase()
+      if (lowerCase === "") {
         state.filteredCars = [...state.cars];
       } else {
         state.filteredCars = state.cars.filter((item) => {
           return Object.values(item).some((v) =>
-            v.toString().toLowerCase().includes(action.payload)
+            v.toString().toLowerCase().includes(lowerCase)
           );
         });
       }
